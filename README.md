@@ -1,4 +1,4 @@
-## Find a perfect weather match for your current city, or search by custom parameters!
+## Find the perfect weather match for your current city, search by custom parameters, and more!
 
 </p>
 <p align="center">
