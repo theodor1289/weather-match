@@ -18,7 +18,7 @@ public class CityRepositoryTests {
 //        Only makes sense to use them when third parties utilize the database:
 //        cityRepository.flush();
 //        cityRepository.saveAndFlush(...);
-
+// TODO: remove those tests after implementing database OR create test database
     private Weather cloudyWeather = new Weather("Clouds", "15.6", "46", "57");
     private Weather rainyWeather = new Weather("Rainy", "11.9", "67", "80");
     private Weather sunnyWeather = new Weather("Sunny", "25.2", "24", "12");

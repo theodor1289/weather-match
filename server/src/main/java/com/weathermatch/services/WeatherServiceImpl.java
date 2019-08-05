@@ -33,7 +33,6 @@ public class WeatherServiceImpl implements WeatherService {
 
     @Scheduled(cron = "0 * * * * ?")
     public void FetchNextWeatherBatch() {
-        ArrayList<Long> fetched = new ArrayList<>();
         for(int i = currentBatch; i<Math.min(idList.size(), currentBatch + batchSize); i++) {
             // recommendation is to make calls to api.openweathermap.org no more than one time every 10 minutes for one location
             String resourceUrl = "http://api.openweathermap.org/data/2.5/weather?id=" + idList.get(i) + "&APPID=" + owmApiKey;
@@ -45,10 +44,7 @@ public class WeatherServiceImpl implements WeatherService {
 
             // update the data
             cityRepository.save(cityModel);
-            fetched.add(cityModel.getId());
         }
-        // 833, 2960, 3245, 3530, 5174, 7264, 8084, 9874, 11263, 11754, 12795, 14177, 14256, 18007, 18093, 18557, 18918, 23814, 24851, 29033 are the first 20 fetched ids
-        // logger.info("fetchNextWeatherBatch() - fetched " + fetched.toString()); // use this for extra information
 
         currentBatch += batchSize;
 
