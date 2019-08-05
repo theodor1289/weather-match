@@ -18,6 +18,8 @@
 
 <img alt="Sonar Tech Debt" src="https://img.shields.io/sonar/tech_debt/com.weathermatch:weather-match?server=https%3A%2F%2Fsonarcloud.io" data-canonical-src="https://camo.githubusercontent.com/66924413bc470e877d239cb9f50122eb69a26ca6/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f746563685f646562742f636f6d2e776561746865726d617463683a776561746865722d6d617463683f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f">
 
+<img alt="Swagger Validator" src="https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/theodor1289/weather-match/master/server/api-docs" data-canonical-src="https://camo.githubusercontent.com/d6fc28ca9f4d36715d11e3551842a95d75304bda/68747470733a2f2f696d672e736869656c64732e696f2f737761676765722f76616c69642f322e302f68747470732f7261772e67697468756275736572636f6e74656e742e636f6d2f7468656f646f72313238392f776561746865722d6d617463682f6d61737465722f7365727665722f6170692d646f6373">
+
 </p>
 
   More badges to come: Swagger Validator
