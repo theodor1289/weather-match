@@ -22,6 +22,4 @@
 
 </p>
 
-  More badges to come: Swagger Validator
-
 ### Theodor Amariucai, August 2019
