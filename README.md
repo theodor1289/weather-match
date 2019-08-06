@@ -1,27 +1,34 @@
 ## Find the perfect weather match for your current city, search by custom parameters, and more!
 
 <p align="center">
-  <img alt="GitHub repo size" src="https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&url=https://img.shields.io/github/repo-size/theodor1289/weather-match">
-  
-<img alt="Travis (.org)" src="https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&url=https://img.shields.io/travis/theodor1289/weather-match">
-  
-<img alt="Swagger Validator" src="https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/theodor1289/weather-match/master/server/api-docs">
+<img alt="GitHub repo size" src="https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&url=https://img.shields.io/github/repo-size/theodor1289/weather-match">
+<img alt="Sonar Lines of Code" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=ncloc">
 </p>
 
 <p align="center">
-<img alt="Sonar Tests" src="https://img.shields.io/sonar/tests/com.weathermatch:weather-match?compact_message&server=https%3A%2F%2Fsonarcloud.io">
-  
-<img alt="Sonar Lines of Code" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=ncloc">
-
-<img alt="Sonar Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=coverage">
-
-<img alt="Sonar Code Smells" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=code_smells">
-
+<img alt="Travis (.org)" src="https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&url=https://img.shields.io/travis/theodor1289/weather-match">
 <img alt="Sonar Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=alert_status">
+</p>
 
+<p align="center">
+  <img alt="Maintainability rating" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=sqale_rating">  
+<img alt="Sonar Code Smells" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=code_smells">
 <img alt="Sonar Tech Debt" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=sqale_index">
+</p>
 
+<p align="center">
+<img alt="Sonar reliability rating" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=reliability_rating">
+<img alt="Sonar Tests" src="https://img.shields.io/sonar/tests/com.weathermatch:weather-match?compact_message&server=https%3A%2F%2Fsonarcloud.io">
+<img alt="Sonar Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=coverage">
+</p>
+
+<p align="center">
 <img alt="Sonar Security" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=security_rating">
+<img alt="Security vulnerabilities" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=vulnerabilities">
+</p>
+
+<p align="center">
+<img alt="Swagger Validator" src="https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/theodor1289/weather-match/master/server/api-docs">
 </p>
 
 <!-- This strategy might speed up badge load time:
