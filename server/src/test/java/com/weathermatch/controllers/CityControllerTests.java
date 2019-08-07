@@ -48,15 +48,15 @@ public class CityControllerTests {
     private String endpoint = "/api/v1/city";
     private String nonexistentID = "123456789";
     private String errorID = "123456";
-    private Weather cloudyWeather = new Weather("Clouds", "15.6", "46", "57");
-    private Weather emptyWeather = new Weather("", "", "", "");
-    private City Bucharest = new City(6513L, "Bucharest", "Romania", cloudyWeather);
-    private String BucharestJson = "{\"id\":6513,\"name\":\"Bucharest\",\"country\":\"Romania\",\"weather\":{\"main\":\"Clouds\",\"temperature\":\"15.6\",\"humidity\":\"46\",\"windspeed\":\"57\"}}";
-    private City Iasi = new City(8945L, "Iasi", "Romania", cloudyWeather);
-    private String IasiJson = "{\"id\":8945,\"name\":\"Iasi\",\"country\":\"Romania\",\"weather\":{\"main\":\"Clouds\",\"temperature\":\"15.6\",\"humidity\":\"46\",\"windspeed\":\"57\"}}";
-    private City Edinburgh = new City(7524L, "Edinburgh", "Romania", cloudyWeather);
-    private String EdinburghJson = "{\"id\":7524,\"name\":\"Edinburgh\",\"country\":\"Romania\",\"weather\":{\"main\":\"Clouds\",\"temperature\":\"15.6\",\"humidity\":\"46\",\"windspeed\":\"57\"}}";
-    private City Giesdorf = new City(2920572L, "Giesdorf", "DE", emptyWeather);
+    private Weather cloudyWeather = new Weather("Clouds", 15.6, 46d, 57d);
+    private Weather emptyWeather = new Weather(null, null, null, null);
+    private City Bucharest = new City(6513L, "Bucharest", "Romania", 13.4, 15.4, cloudyWeather);
+    private String BucharestJson = "{\"id\":6513,\"name\":\"Bucharest\",\"country\":\"Romania\",\"longitude\":13.4,\"latitude\":15.4,\"weather\":{\"main\":\"Clouds\",\"temperature\":15.6,\"humidity\":46.0,\"windspeed\":57.0}}";
+    private City Iasi = new City(8945L, "Iasi", "Romania",13.463, 18.4, cloudyWeather);
+    private String IasiJson = "{\"id\":8945,\"name\":\"Iasi\",\"country\":\"Romania\",\"longitude\":13.463,\"latitude\":18.4,\"weather\":{\"main\":\"Clouds\",\"temperature\":15.6,\"humidity\":46.0,\"windspeed\":57.0}}";
+    private City Edinburgh = new City(7524L, "Edinburgh", "Romania",24.4, 63.4, cloudyWeather);
+    private String EdinburghJson = "{\"id\":7524,\"name\":\"Edinburgh\",\"country\":\"Romania\",\"longitude\":24.4,\"latitude\":63.4,\"weather\":{\"main\":\"Clouds\",\"temperature\":15.6,\"humidity\":46.0,\"windspeed\":57.0}}";
+    private City Giesdorf = new City(2920572L, "Giesdorf", "DE",11.4, 41d, emptyWeather);
 
     @Before
     public void Setup() {
@@ -123,7 +123,7 @@ public class CityControllerTests {
                 entity,
                 String.class);
         assertTrue(Objects.requireNonNull(response.getBody()).contains("could not be found"));
-        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class CityControllerTests {
                 entity,
                 String.class);
         assertNull(response.getBody());
-        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
     // TODO: figure out why this is 404 and not 500
@@ -150,7 +150,7 @@ public class CityControllerTests {
                 entity,
                 String.class);
         assertTrue(Objects.requireNonNull(response.getBody()).contains("404"));
-        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -163,7 +163,7 @@ public class CityControllerTests {
                 entity,
                 String.class);
         assertTrue (Objects.requireNonNull(response.getBody()).contains("400"));
-        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     private String createURLWithPort() {

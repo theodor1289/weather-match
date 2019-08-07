@@ -1,6 +1,6 @@
 package com.weathermatch.services;
 
-import com.weathermatch.dtos.CompleteOwmDto;
+import com.weathermatch.dtos.OpenWeatherMapDto;
 import com.weathermatch.models.City;
 import com.weathermatch.dao.CityRepository;
 import com.weathermatch.models.Weather;
@@ -39,11 +39,11 @@ public class WeatherServiceImpl implements WeatherService {
             // TODO: make sure any http response other than 200 is dealt with
             // recommendation is to make calls to api.openweathermap.org no more than one time every 10 minutes for one location
             String resourceUrl = "http://api.openweathermap.org/data/2.5/weather?id=" + idList.get(i) + "&APPID=" + owmApiKey;
-            CompleteOwmDto completeOwmDto = restTemplate.getForObject(resourceUrl, CompleteOwmDto.class);
+            OpenWeatherMapDto openWeatherMapDto = restTemplate.getForObject(resourceUrl, OpenWeatherMapDto.class);
 
             // populate the models
-            Weather weatherModel = new Weather(completeOwmDto.getWeather().getMain(), completeOwmDto.getMain().getTemp(), completeOwmDto.getMain().getHumidity(), completeOwmDto.getWind().getSpeed());
-            City cityModel = new City(completeOwmDto.getId(), completeOwmDto.getName(), completeOwmDto.getSys().getCountry(), weatherModel);
+            Weather weatherModel = new Weather(openWeatherMapDto.getWeather().getMain(), Double.valueOf(openWeatherMapDto.getMain().getTemp()), Double.valueOf(openWeatherMapDto.getMain().getHumidity()), Double.valueOf(openWeatherMapDto.getWind().getSpeed()));
+            City cityModel = new City(openWeatherMapDto.getId(), openWeatherMapDto.getName(), openWeatherMapDto.getSys().getCountry(), Double.valueOf(openWeatherMapDto.getCoord().getLon()), Double.valueOf(openWeatherMapDto.getCoord().getLat()), weatherModel);
 
             // update the data
             cityRepository.save(cityModel);

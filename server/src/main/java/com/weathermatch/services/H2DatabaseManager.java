@@ -7,5 +7,5 @@ import javax.annotation.PostConstruct;
 @Service
 public interface H2DatabaseManager {
     @PostConstruct
-    void Initialize();
+    void initialize();
 }

@@ -10,21 +10,21 @@ import java.util.*;
 public class UserToPrincipal implements UserDetails {
 
     private User user;
-    private List<AuthGroup> authGroups;
+    private List<AuthUserGroup> authUserGroups;
 
-    public UserToPrincipal(User user, List<AuthGroup> authGroups){
+    public UserToPrincipal(User user, List<AuthUserGroup> authUserGroups){
         super();
         this.user = user;
-        this.authGroups = authGroups;
+        this.authUserGroups = authUserGroups;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(authGroups==null){
+        if(authUserGroups ==null){
             return Collections.emptySet();
         }
         Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
-        authGroups.forEach(group -> grantedAuthorities.add(new SimpleGrantedAuthority(group.getAuthGroup())));
+        authUserGroups.forEach(group -> grantedAuthorities.add(new SimpleGrantedAuthority(group.getAuthGroup())));
         return grantedAuthorities;
     }
 

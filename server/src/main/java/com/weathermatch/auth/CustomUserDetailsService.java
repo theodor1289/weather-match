@@ -12,12 +12,12 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final AuthGroupRepository authGroupRepository;
+    private final AuthUserGroupRepository authUserGroupRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository, AuthGroupRepository authGroupRepository){
+    public CustomUserDetailsService(UserRepository userRepository, AuthUserGroupRepository authUserGroupRepository){
         super();
         this.userRepository = userRepository;
-        this.authGroupRepository = authGroupRepository;
+        this.authUserGroupRepository = authUserGroupRepository;
     }
 
     @Override
@@ -28,8 +28,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Cannot find username: " + username);
         }
 
-        List<AuthGroup> authGroups = this.authGroupRepository.findByUsername(username);
+        List<AuthUserGroup> authUserGroups = this.authUserGroupRepository.findByUsername(username);
 
-        return new UserToPrincipal(user, authGroups);
+        return new UserToPrincipal(user, authUserGroups);
     }
 }

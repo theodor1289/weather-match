@@ -1,6 +1,6 @@
 //package com.weathermatch.services;
 //
-//import com.weathermatch.DAOs.CityRepository;
+//import com.weathermatch.dao.CityRepository;
 //import com.weathermatch.models.City;
 //import com.weathermatch.models.Weather;
 //import org.junit.Before;
@@ -49,11 +49,11 @@
 //        cityList.add(new City(18557L, "City " + 18557, "Test", emptyWeather));
 //        cityList.add(new City(18918L, "City " + 18918, "Test", emptyWeather));
 //        when(cityRepository.findAll()).thenReturn(cityList);
-//        weatherService.BuildIdList();
+//        weatherService.buildIdList();
 //    }
 //
 //    @Test
 //    public void FetchNextWeatherBatch_2Cycles16Cities_Success(){
-//        weatherService.FetchNextWeatherBatch();
+//        weatherService.fetchNextWeatherBatch();
 //    }
 //}

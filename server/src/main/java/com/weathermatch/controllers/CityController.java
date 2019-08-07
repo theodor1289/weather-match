@@ -52,7 +52,7 @@ public class CityController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("City with id '%d' could not be found", id));
             }
 
-            if (response.getWeather().getTemperature().equals("")) {
+            if (response.getWeather().getTemperature() == null) {
                 logger.info("getCity({}) - responded with No Content", id);
                 throw new ResponseStatusException(HttpStatus.NO_CONTENT, String.format("City with id '%d' has not yet been updated", id));
             }
@@ -62,7 +62,7 @@ public class CityController {
         } catch (ResponseStatusException ex){
             throw ex;
         } catch (Exception ex) {
-            logger.error("getCity({}) - responded with Internal Server Error. Exception message: " + ex.getMessage(), id);
+            logger.error(String.format("getCity({}) - responded with Internal Server Error. Exception message: %s", ex.getMessage()), id);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

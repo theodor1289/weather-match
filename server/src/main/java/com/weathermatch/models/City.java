@@ -15,6 +15,12 @@ public class City {
     @Column(name = "COUNTRY")
     private String country;
 
+    @Column(name = "LONGITUDE")
+    private Double longitude;
+
+    @Column(name = "LATITUDE")
+    private Double latitude;
+
     @Embedded
     private Weather weather;
 
@@ -22,11 +28,29 @@ public class City {
 
     }
 
-    public City(Long id, String name, String country, Weather weather) {
+    public City(Long id, String name, String country, Double longitude, Double latitude, Weather weather) {
         this.id = id;
         this.name = name;
         this.country = country;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.weather = weather;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
     public Long getId() {

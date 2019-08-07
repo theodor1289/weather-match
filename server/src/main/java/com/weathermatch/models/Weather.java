@@ -9,19 +9,19 @@ public class Weather {
     private String main;
 
     @Column(name = "TEMPERATURE")
-    private String temperature;
+    private Double temperature;
 
     @Column(name = "HUMIDITY")
-    private String humidity;
+    private Double humidity;
 
     @Column(name = "WINDSPEED")
-    private String windspeed;
+    private Double windspeed;
 
     protected Weather(){
 
     }
 
-    public Weather(String main, String temperature, String humidity, String windspeed) {
+    public Weather(String main, Double temperature, Double humidity, Double windspeed) {
         this.main = main;
         this.temperature = temperature;
         this.humidity = humidity;
@@ -36,27 +36,27 @@ public class Weather {
         this.main = main;
     }
 
-    public String getTemperature() {
+    public Double getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(Double temperature) {
         this.temperature = temperature;
     }
 
-    public String getHumidity() {
+    public Double getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(String humidity) {
+    public void setHumidity(Double humidity) {
         this.humidity = humidity;
     }
 
-    public String getWindspeed() {
+    public Double getWindspeed() {
         return windspeed;
     }
 
-    public void setWindspeed(String windspeed) {
+    public void setWindspeed(Double windspeed) {
         this.windspeed = windspeed;
     }
 }

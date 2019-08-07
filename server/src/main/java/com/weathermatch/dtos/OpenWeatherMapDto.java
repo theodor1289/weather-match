@@ -3,24 +3,31 @@ package com.weathermatch.dtos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompleteOwmDto {
+public class OpenWeatherMapDto {
     private ArrayList< Weather > weather = new ArrayList <> ();
-    private Main MainObject;
-    private Wind WindObject;
-    private Sys SysObject;
+    private Coord coord;
+    private Main mainObject;
+    private Wind windObject;
+    private Sys sysObject;
     private float id;
     private String name;
+    public Coord getCoord() {
+        return coord;
+    }
+    public void setCoord(Coord coord) {
+        this.coord = coord;
+    }
     public Weather getWeather() {
         return weather.get(0);
     }
     public Main getMain() {
-        return MainObject;
+        return mainObject;
     }
     public Wind getWind() {
-        return WindObject;
+        return windObject;
     }
     public Sys getSys() {
-        return SysObject;
+        return sysObject;
     }
     public Long getId() {
         return (long) id;
@@ -32,13 +39,13 @@ public class CompleteOwmDto {
         this.weather = (ArrayList<Weather>) weather;
     }
     public void setMain(Main mainObject) {
-        this.MainObject = mainObject;
+        this.mainObject = mainObject;
     }
     public void setWind(Wind windObject) {
-        this.WindObject = windObject;
+        this.windObject = windObject;
     }
     public void setSys(Sys sysObject) {
-        this.SysObject = sysObject;
+        this.sysObject = sysObject;
     }
     public void setId(float id) {
         this.id = id;

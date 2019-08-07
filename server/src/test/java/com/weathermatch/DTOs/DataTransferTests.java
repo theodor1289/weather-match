@@ -19,14 +19,14 @@ public class DataTransferTests {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        CompleteOwmDto completeOwmDto = mapper.readValue(resource, CompleteOwmDto.class);
-        assertEquals(2172797L, (long) completeOwmDto.getId());
-        assertEquals("Clouds", completeOwmDto.getWeather().getMain());
-        assertEquals("27.0", completeOwmDto.getMain().getTemp());
-        assertEquals("74.0", completeOwmDto.getMain().getHumidity());
-        assertEquals("AU", completeOwmDto.getSys().getCountry());
-        assertEquals("Cairns", completeOwmDto.getName());
-        assertEquals("3.6", completeOwmDto.getWind().getSpeed());
+        OpenWeatherMapDto openWeatherMapDto = mapper.readValue(resource, OpenWeatherMapDto.class);
+        assertEquals(2172797L, (long) openWeatherMapDto.getId());
+        assertEquals("Clouds", openWeatherMapDto.getWeather().getMain());
+        assertEquals("27.0", openWeatherMapDto.getMain().getTemp());
+        assertEquals("74.0", openWeatherMapDto.getMain().getHumidity());
+        assertEquals("AU", openWeatherMapDto.getSys().getCountry());
+        assertEquals("Cairns", openWeatherMapDto.getName());
+        assertEquals("3.6", openWeatherMapDto.getWind().getSpeed());
     }
 
 }
