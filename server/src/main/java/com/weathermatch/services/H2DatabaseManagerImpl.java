@@ -22,14 +22,14 @@ public class H2DatabaseManagerImpl {
 
     private static final Logger logger = LoggerFactory.getLogger(H2DatabaseManagerImpl.class);
     private final Weather emptyWeather = new Weather("", "", "", "");
-    private final String cityJsonFile = "src/main/resources/city-list.json";
+    private static final String cityJsonFile = "src/main/resources/city-list.json";
 
     @Autowired
     CityRepository cityRepository;
 
     // TODO: remove this class and 'city-list.json' after database implemented (as they're only to be used once, when initially populating the database)
     @PostConstruct
-    public void Initialize(){
+    public void initialize(){
         JSONParser parser = new JSONParser();
         try{
             JSONArray cityArray = (JSONArray) parser.parse(new FileReader(cityJsonFile));

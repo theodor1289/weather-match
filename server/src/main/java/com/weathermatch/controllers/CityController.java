@@ -31,38 +31,38 @@ public class CityController {
             @ApiResponse(code = 200, message = "City weather is available", response = City.class),
             @ApiResponse(code = 204, message = "City weather has not yet been updated"),
             @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 404, message = "City with given id has not been found"),
+            @ApiResponse(code = 404, message = "City with given id could not be found"),
             @ApiResponse(code = 500, message = "Internal server error")})
     @GetMapping(value = "/city")
     public ResponseEntity<City> getCity(@ApiParam(
             value = "Long value representing the city id",
             example = "6553395") @RequestParam @Valid Long id) {
         try {
-            logger.info("getCity(" + id + ") - started");
+            logger.info("getCity({}) - started", id);
 
             if (id == null) {
-                logger.info("getCity(" + id + ") - responded with Bad Request");
+                logger.info("getCity({}) - responded with Bad Request", id);
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
 
             City response = cityRepository.findById(id);
 
             if (response == null) {
-                logger.info("getCity(" + id + ") - responded with Not Found");
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "City with given id has not been found");
+                logger.info("getCity({}) - responded with Not Found", id);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("City with id '%d' could not be found", id));
             }
 
             if (response.getWeather().getTemperature().equals("")) {
-                logger.info("getCity(" + id + ") - responded with No Content");
-                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "City weather has not yet been updated");
+                logger.info("getCity({}) - responded with No Content", id);
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, String.format("City with id '%d' has not yet been updated", id));
             }
 
-            logger.info("getCity(" + id + ") - responded with OK");
+            logger.info("getCity({}) - responded with OK", id);
             return ResponseEntity.ok(response);
         } catch (ResponseStatusException ex){
             throw ex;
         } catch (Exception ex) {
-            logger.error("getCity(" + id + ") - responded with Internal Server Error. Exception message: " + ex.getMessage());
+            logger.error("getCity({}) - responded with Internal Server Error. Exception message: " + ex.getMessage(), id);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

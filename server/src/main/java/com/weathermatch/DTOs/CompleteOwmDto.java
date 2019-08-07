@@ -1,10 +1,10 @@
 package com.weathermatch.dtos;
 
 import java.util.ArrayList;
+import java.util.List;
 
-// TODO: Update DTOs with modern annotations e.g. @NoArgsConstructor
 public class CompleteOwmDto {
-    private ArrayList< Weather > weather = new ArrayList < Weather > ();
+    private ArrayList< Weather > weather = new ArrayList <> ();
     private Main MainObject;
     private Wind WindObject;
     private Sys SysObject;
@@ -28,8 +28,8 @@ public class CompleteOwmDto {
     public String getName() {
         return name;
     }
-    public void setWeather(ArrayList< Weather > weather) {
-        this.weather = weather;
+    public void setWeather(List< Weather > weather) {
+        this.weather = (ArrayList<Weather>) weather;
     }
     public void setMain(Main mainObject) {
         this.MainObject = mainObject;

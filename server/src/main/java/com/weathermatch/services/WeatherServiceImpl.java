@@ -57,7 +57,7 @@ public class WeatherServiceImpl implements WeatherService {
             logger.info("fetchNextWeatherBatch() - end of list reached, currentBatch reset");
         }
 
-        logger.info("fetchNextWeatherBatch() - finished, currentBatch is now " + currentBatch);
+        logger.info("fetchNextWeatherBatch() - finished, currentBatch is now {}", currentBatch);
     }
 
     private List<Long> idList;
@@ -65,7 +65,7 @@ public class WeatherServiceImpl implements WeatherService {
     // we need a list of ids in advance for fetchNextWeatherBatch()
     @PostConstruct
     @DependsOn("H2DatabaseManagerImpl") // TODO: remove this line after database implemented
-    public void BuildIdList() {
+    public void buildIdList() {
         idList = new ArrayList<>();
         cityRepository.findAll().forEach(city -> idList.add(city.getId()));
     }

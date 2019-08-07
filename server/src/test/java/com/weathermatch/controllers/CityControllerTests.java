@@ -18,7 +18,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Objects;
+
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -119,8 +122,8 @@ public class CityControllerTests {
                 HttpMethod.GET,
                 entity,
                 String.class);
-        assert (response.getBody().contains("City with given id has not been found"));
-        assert (response.getStatusCode().equals(HttpStatus.NOT_FOUND));
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("could not be found"));
+        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -132,8 +135,8 @@ public class CityControllerTests {
                 HttpMethod.GET,
                 entity,
                 String.class);
-        assert (response.getBody() == null);
-        assert (response.getStatusCode().equals(HttpStatus.NO_CONTENT));
+        assertNull(response.getBody());
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     // TODO: figure out why this is 404 and not 500
@@ -146,8 +149,8 @@ public class CityControllerTests {
                 HttpMethod.GET,
                 entity,
                 String.class);
-        assert (response.getBody().contains("404"));
-        assert (response.getStatusCode().equals(HttpStatus.NOT_FOUND));
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("404"));
+        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -159,8 +162,8 @@ public class CityControllerTests {
                 HttpMethod.GET,
                 entity,
                 String.class);
-        assert (response.getBody().contains("400"));
-        assert (response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+        assertTrue (Objects.requireNonNull(response.getBody()).contains("400"));
+        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     private String createURLWithPort() {

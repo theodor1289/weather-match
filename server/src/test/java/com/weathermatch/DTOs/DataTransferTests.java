@@ -8,6 +8,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DataTransferTests {
 
@@ -17,18 +19,14 @@ public class DataTransferTests {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        try {
         CompleteOwmDto completeOwmDto = mapper.readValue(resource, CompleteOwmDto.class);
-        assert(completeOwmDto.getId() == 2172797L);
-        assert(completeOwmDto.getWeather().getMain().equals("Clouds"));
-        assert(completeOwmDto.getMain().getTemp().equals("27.0"));
-        assert(completeOwmDto.getMain().getHumidity().equals("74.0"));
-        assert(completeOwmDto.getSys().getCountry().equals("AU"));
-        assert(completeOwmDto.getName().equals("Cairns"));
-        assert(completeOwmDto.getWind().getSpeed().equals("3.6"));
-        } catch (IOException err) {
-            throw err;
-        }
+        assertEquals(2172797L, (long) completeOwmDto.getId());
+        assertEquals("Clouds", completeOwmDto.getWeather().getMain());
+        assertEquals("27.0", completeOwmDto.getMain().getTemp());
+        assertEquals("74.0", completeOwmDto.getMain().getHumidity());
+        assertEquals("AU", completeOwmDto.getSys().getCountry());
+        assertEquals("Cairns", completeOwmDto.getName());
+        assertEquals("3.6", completeOwmDto.getWind().getSpeed());
     }
 
 }

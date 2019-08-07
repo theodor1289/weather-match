@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.junit.Assert.*;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @DataJpaTest
 public class CityRepositoryTests {
@@ -42,25 +44,25 @@ public class CityRepositoryTests {
 
     @Test
     public void CityRepository_DuplicateIds_NotAdded() {
-        assert(cityRepository.findAll().size() == 6);
+        assertEquals(6, cityRepository.findAll().size());
         cityRepository.save(new City(1542L, "Duplicate", "Duplicate", cloudyWeather));
         cityRepository.save(new City(1542L, "Duplicate 2", "Duplicate 2", rainyWeather));
         cityRepository.save(new City(7524L, "Duplicate 3", "Duplicate 3", sunnyWeather));
-        assert(cityRepository.findAll().size() == 6);
+        assertEquals(6, cityRepository.findAll().size());
     }
 
     @Test
     public void CityRepository_WeatherQueries_Success() {
-        assert(cityRepository.findAllByWeather(cloudyWeather).size() == 3);
-        assert(cityRepository.findAllByWeather(rainyWeather).size() == 2);
-        assert(cityRepository.findAllByWeather(sunnyWeather).size() == 1);
-        assert(cityRepository.findAllByWeather(hazyWeather).size() == 0);
+        assertEquals(3, cityRepository.findAllByWeather(cloudyWeather).size());
+        assertEquals(2, cityRepository.findAllByWeather(rainyWeather).size());
+        assertEquals(1, cityRepository.findAllByWeather(sunnyWeather).size());
+        assertEquals(0, cityRepository.findAllByWeather(hazyWeather).size());
     }
 
     @Test
     public void CityRepository_IdQueries_Success() {
-        assert(cityRepository.findById(6513L).getName().equals("Bucharest"));
-        assert(cityRepository.findById(7524L).getName().equals("Edinburgh"));
-        assert(cityRepository.findById(1234L) == null);
+        assertEquals("Bucharest", cityRepository.findById(6513L).getName());
+        assertEquals("Edinburgh", cityRepository.findById(7524L).getName());
+        assertNull(cityRepository.findById(1234L));
     }
 }
