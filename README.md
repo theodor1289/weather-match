@@ -28,7 +28,7 @@
 </p>
 
 <p align="center">
-<img alt="Swagger Validator" src="https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/theodor1289/weather-match/master/server/api-docs">
+<img alt="Swagger Validator" src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/theodor1289/weather-match/master/server/api-docs.json">
 </p>
 
 <!-- This strategy might speed up badge load time:
