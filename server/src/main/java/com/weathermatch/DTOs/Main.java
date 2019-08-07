@@ -1,4 +1,4 @@
-package com.weathermatch.DTOs;
+package com.weathermatch.dtos;
 
 public class Main {
     private float temp;

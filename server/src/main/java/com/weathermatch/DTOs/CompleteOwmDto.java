@@ -1,4 +1,4 @@
-package com.weathermatch.DTOs;
+package com.weathermatch.dtos;
 
 import java.util.ArrayList;
 

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface WeatherService {
     @Scheduled(cron = "0 * * * * ?")
-    void FetchNextWeatherBatch();
+    void fetchNextWeatherBatch();
 }

@@ -1,7 +1,6 @@
 package com.weathermatch.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -10,17 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PagesController {
 
     @GetMapping(value={"/", "/index"})
-    public String getHomePage(Model model){
+    public String getHomePage(){
         return "index";
     }
 
     @GetMapping(value="/login")
-    public String getLoginPage(Model model){
+    public String getLoginPage(){
         return "login";
     }
 
     @GetMapping(value="/logout-success")
-    public String getLogoutPage(Model model){
+    public String getLogoutPage(){
         return "logout";
     }
 }

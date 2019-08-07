@@ -1,7 +1,7 @@
 package com.weathermatch.services;
 
 import com.weathermatch.models.City;
-import com.weathermatch.DAOs.CityRepository;
+import com.weathermatch.dao.CityRepository;
 import com.weathermatch.models.Weather;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

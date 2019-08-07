@@ -1,4 +1,4 @@
-package com.weathermatch.DTOs;
+package com.weathermatch.dtos;
 
 public class Weather {
     private String main;

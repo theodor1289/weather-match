@@ -1,4 +1,4 @@
-package com.weathermatch.DAOs;
+package com.weathermatch.dao;
 
 import com.weathermatch.models.City;
 import com.weathermatch.models.Weather;

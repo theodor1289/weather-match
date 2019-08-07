@@ -16,9 +16,8 @@ public class Swagger2Config {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors
-                        .basePackage("com.weathermatch.controller"))
-                .paths(PathSelectors.any()) //regex("/.*")
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.regex("/api/v1/.*|/actuator/health"))
                 .build()
                 .apiInfo(apiEndPointsInfo());
     }
@@ -26,8 +25,8 @@ public class Swagger2Config {
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title("Weather Match REST API")
                 .description("Searches for a perfect weather match!")
-                .license("Apache 2.0")
-                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+                .license("Mozilla 2.0")
+                .licenseUrl("https://www.mozilla.org/en-US/MPL/2.0/")
                 .version("1.0.0")
                 .build();
     }

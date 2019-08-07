@@ -1,8 +1,8 @@
 package com.weathermatch.services;
 
-import com.weathermatch.DTOs.CompleteOwmDto;
+import com.weathermatch.dtos.CompleteOwmDto;
 import com.weathermatch.models.City;
-import com.weathermatch.DAOs.CityRepository;
+import com.weathermatch.dao.CityRepository;
 import com.weathermatch.models.Weather;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +32,11 @@ public class WeatherServiceImpl implements WeatherService {
     private Integer batchSize = 50; // API limit is 60 (enforced on a 'key' basis), so just to be safe
 
     @Scheduled(cron = "0 * * * * ?")
-    public void FetchNextWeatherBatch() {
+    public void fetchNextWeatherBatch() {
+        logger.info("fetchNextWeatherBatch() - started");
+
         for(int i = currentBatch; i<Math.min(idList.size(), currentBatch + batchSize); i++) {
+            // TODO: make sure any http response other than 200 is dealt with
             // recommendation is to make calls to api.openweathermap.org no more than one time every 10 minutes for one location
             String resourceUrl = "http://api.openweathermap.org/data/2.5/weather?id=" + idList.get(i) + "&APPID=" + owmApiKey;
             CompleteOwmDto completeOwmDto = restTemplate.getForObject(resourceUrl, CompleteOwmDto.class);
