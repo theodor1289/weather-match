@@ -1,11 +1,11 @@
 package com.weathermatch.dtos;
 
 public class Wind {
-    private float speed;
-    public String getSpeed() {
-        return String.valueOf(speed);
+    private Double speed;
+    public Double getSpeed() {
+        return speed;
     }
-    public void setSpeed(float speed) {
+    public void setSpeed(Double speed) {
         this.speed = speed;
     }
 }

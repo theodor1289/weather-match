@@ -9,7 +9,7 @@ public class OpenWeatherMapDto {
     private Main mainObject;
     private Wind windObject;
     private Sys sysObject;
-    private float id;
+    private Long id;
     private String name;
     public Coord getCoord() {
         return coord;
@@ -30,7 +30,7 @@ public class OpenWeatherMapDto {
         return sysObject;
     }
     public Long getId() {
-        return (long) id;
+        return id;
     }
     public String getName() {
         return name;
@@ -47,7 +47,7 @@ public class OpenWeatherMapDto {
     public void setSys(Sys sysObject) {
         this.sysObject = sysObject;
     }
-    public void setId(float id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public void setName(String name) {

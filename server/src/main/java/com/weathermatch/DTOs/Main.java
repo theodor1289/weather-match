@@ -1,16 +1,16 @@
 package com.weathermatch.dtos;
 
 public class Main {
-    private float temp;
-    private float humidity;
-    public String getTemp() { return String.valueOf(temp - 273.15F); } // Kelvin to Celsius
-    public String getHumidity() {
-        return String.valueOf(humidity);
+    private Double temp;
+    private Double humidity;
+    public Double getTemp() { return (temp - 273.15d); } // Kelvin to Celsius
+    public Double getHumidity() {
+        return humidity;
     }
-    public void setTemp(float temp) {
+    public void setTemp(Double temp) {
         this.temp = temp;
     }
-    public void setHumidity(float humidity) {
+    public void setHumidity(Double humidity) {
         this.humidity = humidity;
     }
 }

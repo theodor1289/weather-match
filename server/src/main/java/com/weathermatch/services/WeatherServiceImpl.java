@@ -42,8 +42,8 @@ public class WeatherServiceImpl implements WeatherService {
             OpenWeatherMapDto openWeatherMapDto = restTemplate.getForObject(resourceUrl, OpenWeatherMapDto.class);
 
             // populate the models
-            Weather weatherModel = new Weather(openWeatherMapDto.getWeather().getMain(), Double.valueOf(openWeatherMapDto.getMain().getTemp()), Double.valueOf(openWeatherMapDto.getMain().getHumidity()), Double.valueOf(openWeatherMapDto.getWind().getSpeed()));
-            City cityModel = new City(openWeatherMapDto.getId(), openWeatherMapDto.getName(), openWeatherMapDto.getSys().getCountry(), Double.valueOf(openWeatherMapDto.getCoord().getLon()), Double.valueOf(openWeatherMapDto.getCoord().getLat()), weatherModel);
+            Weather weatherModel = new Weather(openWeatherMapDto.getWeather().getMain(), openWeatherMapDto.getMain().getTemp(), openWeatherMapDto.getMain().getHumidity(), openWeatherMapDto.getWind().getSpeed());
+            City cityModel = new City(openWeatherMapDto.getId(), openWeatherMapDto.getName(), openWeatherMapDto.getSys().getCountry(), openWeatherMapDto.getCoord().getLon(), openWeatherMapDto.getCoord().getLat(), weatherModel);
 
             // update the data
             cityRepository.save(cityModel);
