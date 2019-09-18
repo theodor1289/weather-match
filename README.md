@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-<img alt="Travis (.org)" src="https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&url=https://img.shields.io/travis/theodor1289/weather-match">
+<img alt="Travis (.org)" src="https://travis-ci.org/theodor1289/weather-match.svg?branch=master">
 <img alt="Sonar Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=alert_status">
 </p>
 
