@@ -1,15 +1,14 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { styled } from '@material-ui/core/styles';
-import CustomSnackbar from './CustomSnackbar'
+import { styled, useTheme } from '@material-ui/core/styles';
+import CustomSnackbar from './CustomSnackbar';
+import RoomIcon from '@material-ui/icons/Room';
 
 export default function Geolocation() {
+    const theme = useTheme();
+
     const StyledGeoButton = styled(Button)({
-        background: 'linear-gradient(45deg, #3F51B5 30%, #5c6dc6 90%)',
-        borderRadius: 3,
-        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-        height: 48,
-        color: 'white',
+        background: `linear-gradient(45deg, ${theme.palette.primary.dark} 30%, ${theme.palette.primary.main} 90%)`,
     });
 
     var options = {
@@ -32,11 +31,15 @@ export default function Geolocation() {
         console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
+    // TODO: inverse geolocation to be done in backend
     const [showGeolocationSnackbar, setGeolocationSnackbar] = React.useState(false);
     return ( // <> is short for <React.Fragment>
         <>
             <StyledGeoButton
                 className={"m-auto my-2"}
+                startIcon={<RoomIcon />}
+                variant="contained"
+                color="primary"
                 // onClick={navigator.geolocation.getCurrentPosition(success, error, options)}
             >
                 Match my location

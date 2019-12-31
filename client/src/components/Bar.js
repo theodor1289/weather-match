@@ -7,13 +7,17 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
 
 const drawerWidth = 300;
 
 const useStyles = makeStyles(theme => ({
-    menuButton: {
+    menuButtonLeft: {
         marginRight: theme.spacing(2),
+    },
+    menuButtonRight: {
+        marginLeft: theme.spacing(2),
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -90,8 +94,7 @@ export default function Bar(props) {
         >
             <Toolbar>
                 <IconButton
-                    edge="start"
-                    className={clsx(classes.menuButton, props.drawerIsOpen && classes.hide)}
+                    className={clsx(classes.menuButtonLeft, props.drawerIsOpen && classes.hide)}
                     onClick={props.toggleDrawer}
                     color="inherit"
                     aria-label="open drawer"
@@ -115,6 +118,13 @@ export default function Bar(props) {
                         onChange={e => props.searchCities(e.target.value)}
                     />
                 </div>
+                <IconButton
+                    className={clsx(classes.menuButtonRight)}
+                    onClick={props.changeTheme}
+                    color="inherit"
+                >
+                    <Brightness4Icon />
+                </IconButton>
             </Toolbar>
         </AppBar>
     )

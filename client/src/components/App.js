@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import SearchAppBar from './MainUI';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Bar from './Bar';
+import LeftDrawer from './LeftDrawer';
+import Content from './Content';
+
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import indigo from '@material-ui/core/colors/indigo';
+import pink from '@material-ui/core/colors/pink';
 
 class App extends Component {
   constructor() {
@@ -10,15 +17,45 @@ class App extends Component {
       orderDir: 'asc',
       queryText: '',
       lastIndex: 0,
-      drawerIsOpen: false
+      drawerIsOpen: false,
+      appTheme: 'light'
     };
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.searchCities = this.searchCities.bind(this);
+    this.changeTheme = this.changeTheme.bind(this);
   }
 
   toggleDrawer() {
     this.setState({
       drawerIsOpen: !this.state.drawerIsOpen
+    });
+  }
+
+  lightTheme = createMuiTheme({
+    palette: {
+      primary: indigo,
+      secondary: pink,
+      type: 'light'
+    },
+    status: {
+      danger: 'red',
+    },
+  });
+
+  darkTheme = createMuiTheme({
+    palette: {
+      primary: indigo,
+      secondary: pink,
+      type: 'dark'
+    },
+    status: {
+      danger: 'red',
+    },
+  });
+
+  changeTheme() {
+    this.setState({
+      appTheme: this.state.appTheme === 'light'? 'dark' : 'light'
     });
   }
 
@@ -42,10 +79,10 @@ class App extends Component {
   }
 
   render() {
-    let filtCities = this.state.cities;
+    let filteredCities = this.state.cities;
 
     // TODO: This is to be done in the backend, much faster
-    filtCities = filtCities
+    filteredCities = filteredCities
       .sort((a, b) => {
         if (
           a[this.state.orderBy].toLowerCase() <
@@ -65,26 +102,34 @@ class App extends Component {
       });
 
     return (
-      <>
-      <SearchAppBar
-        queryText={this.state.queryText}
-        drawerIsOpen={this.state.drawerIsOpen}
-        toggleDrawer={this.toggleDrawer}
-        filteredCities={filtCities}
-        searchCities={this.searchCities}
-      />
-      </>
-          //  <AddAppointments
-          //         formDisplay={this.state.formDisplay}
-          //         toggleForm={this.toggleForm}
-          //         addAppointment={this.addAppointment}
-          //       />
-          //       <SearchAppointments
-          //         orderBy={this.state.orderBy}
-          //         orderDir={this.state.orderDir}
-          //         changeOrder={this.changeOrder}
-          //         searchApts={this.searchApts}
-          //       /> 
+      <ThemeProvider theme={this.state.appTheme === 'light' ? this.lightTheme : this.darkTheme}>
+        <CssBaseline />
+        <Bar
+          toggleDrawer={this.toggleDrawer}
+          drawerIsOpen={this.state.drawerIsOpen}
+          searchCities={this.searchCities}
+          changeTheme={this.changeTheme}
+        />
+        <LeftDrawer
+          drawerIsOpen={this.state.drawerIsOpen}
+          toggleDrawer={this.toggleDrawer}
+        />
+        <Content
+          drawerIsOpen={this.state.drawerIsOpen}
+          filteredCities={filteredCities}
+        />
+      </ThemeProvider>
+      //  <AddAppointments
+      //         formDisplay={this.state.formDisplay}
+      //         toggleForm={this.toggleForm}
+      //         addAppointment={this.addAppointment}
+      //       />
+      //       <SearchAppointments
+      //         orderBy={this.state.orderBy}
+      //         orderDir={this.state.orderDir}
+      //         changeOrder={this.changeOrder}
+      //         searchApts={this.searchApts}
+      //       /> 
     );
   }
 }
