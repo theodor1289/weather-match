@@ -5,8 +5,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-// import Button from '@material-ui/core/Button';
-// import CardActions from '@material-ui/core/CardActions';
 
 const useStyles = makeStyles({
   card: {
@@ -66,7 +64,7 @@ export default function CityCard({city}) {
             Weather: {city.main}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Temperature: {city.temp} F
+            Temperature: {city.temp} K
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             Humidity: {city.humidity} %

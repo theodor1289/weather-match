@@ -76,13 +76,9 @@ MySnackbarContentWrapper.propTypes = {
     onClose: PropTypes.func,
     variant: PropTypes.oneOf(['error', 'info', 'success', 'warning']).isRequired,
 };
+
 export default function CustomSnackbar(props) {
     const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            //   return;
-            props.setSnackbar(false);
-        }
-
         props.setSnackbar(false);
     };
 
@@ -99,8 +95,8 @@ export default function CustomSnackbar(props) {
             >
                 <MySnackbarContentWrapper
                     onClose={handleClose}
-                    variant="error"
-                    message="An error occured!"
+                    variant={props.type}
+                    message={props.msg}
                 />
             </Snackbar>
         </>

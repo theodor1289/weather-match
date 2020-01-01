@@ -8,6 +8,37 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
 
+const TEMP_STARTRANGE = [-60, 60];
+const HUMIDITY_STARTRANGE = [0, 100];
+const WIND_STARTRANGE = [0, 100];
+const WEATHER_STATES = [
+  'Sunny',
+  'Clouds',
+  'Rainy'
+];
+
+
+const lightTheme = createMuiTheme({
+  palette: {
+    primary: indigo,
+    secondary: pink,
+    type: 'light'
+  },
+  status: {
+    danger: 'red',
+  },
+});
+const darkTheme = createMuiTheme({
+  palette: {
+    primary: indigo,
+    secondary: pink,
+    type: 'dark'
+  },
+  status: {
+    danger: 'red',
+  },
+});
+
 class App extends Component {
   constructor() {
     super();
@@ -18,7 +49,11 @@ class App extends Component {
       queryText: '',
       lastIndex: 0,
       drawerIsOpen: false,
-      appTheme: 'light'
+      appTheme: 'light',
+      weatherFilter: [],
+      tempFilter: TEMP_STARTRANGE,
+      humidityFilter: HUMIDITY_STARTRANGE,
+      windFilter: WIND_STARTRANGE
     };
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.searchCities = this.searchCities.bind(this);
@@ -31,37 +66,39 @@ class App extends Component {
     });
   }
 
-  lightTheme = createMuiTheme({
-    palette: {
-      primary: indigo,
-      secondary: pink,
-      type: 'light'
-    },
-    status: {
-      danger: 'red',
-    },
-  });
-
-  darkTheme = createMuiTheme({
-    palette: {
-      primary: indigo,
-      secondary: pink,
-      type: 'dark'
-    },
-    status: {
-      danger: 'red',
-    },
-  });
-
   changeTheme() {
     this.setState({
-      appTheme: this.state.appTheme === 'light'? 'dark' : 'light'
+      appTheme: this.state.appTheme === 'light' ? 'dark' : 'light'
     });
   }
 
   searchCities(query) {
     this.setState({ queryText: query });
   }
+
+  changeWeatherFilter = (event) => {
+    this.setState({
+      weatherFilter: event.target.value
+    });
+  };
+
+  changeTempFilter = (_event, newValue) => {
+    this.setState({
+      tempFilter: newValue
+    });
+  };
+
+  changeHumidityFilter = (_event, newValue) => {
+    this.setState({
+      humidityFilter: newValue
+    });
+  };
+
+  changeWindFilter = (_event, newValue) => {
+    this.setState({
+      windFilter: newValue
+    });
+  };
 
   componentDidMount() {
     fetch('./test-cities.json')
@@ -97,12 +134,19 @@ class App extends Component {
         return (
           eachItem['name']
             .toLowerCase()
-            .startsWith(this.state.queryText.toLowerCase())
+            .startsWith(this.state.queryText.toLowerCase()) &&
+          (this.state.weatherFilter.length === 0 || this.state.weatherFilter.includes(eachItem['main'])) &&
+          eachItem['humidity'] >= this.state.humidityFilter[0] &&
+          eachItem['humidity'] <= this.state.humidityFilter[1] &&
+          eachItem['speed'] >= this.state.windFilter[0] &&
+          eachItem['speed'] <= this.state.windFilter[1] &&
+          eachItem['temp'] >= this.state.tempFilter[0] + 273.15 &&
+          eachItem['temp'] <= this.state.tempFilter[1] + 273.15
         );
       });
 
     return (
-      <ThemeProvider theme={this.state.appTheme === 'light' ? this.lightTheme : this.darkTheme}>
+      <ThemeProvider theme={this.state.appTheme === 'light' ? lightTheme : darkTheme}>
         <CssBaseline />
         <Bar
           toggleDrawer={this.toggleDrawer}
@@ -113,23 +157,21 @@ class App extends Component {
         <LeftDrawer
           drawerIsOpen={this.state.drawerIsOpen}
           toggleDrawer={this.toggleDrawer}
+          weatherFilter={this.state.weatherFilter}
+          changeWeatherFilter={this.changeWeatherFilter}
+          weatherStates={WEATHER_STATES}
+          tempStartRange={TEMP_STARTRANGE}
+          changeTempFilter={this.changeTempFilter}
+          humidityStartRange={HUMIDITY_STARTRANGE}
+          changeHumidityFilter={this.changeHumidityFilter}
+          windStartRange={WIND_STARTRANGE}
+          changeWindFilter={this.changeWindFilter}
         />
         <Content
           drawerIsOpen={this.state.drawerIsOpen}
           filteredCities={filteredCities}
         />
       </ThemeProvider>
-      //  <AddAppointments
-      //         formDisplay={this.state.formDisplay}
-      //         toggleForm={this.toggleForm}
-      //         addAppointment={this.addAppointment}
-      //       />
-      //       <SearchAppointments
-      //         orderBy={this.state.orderBy}
-      //         orderDir={this.state.orderDir}
-      //         changeOrder={this.changeOrder}
-      //         searchApts={this.searchApts}
-      //       /> 
     );
   }
 }

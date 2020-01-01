@@ -24,15 +24,21 @@ export default function Geolocation() {
         console.log(`Latitude : ${crd.latitude}`);
         console.log(`Longitude: ${crd.longitude}`);
         console.log(`More or less ${crd.accuracy} meters.`);
-        setGeolocationSnackbar(true);
+        setGeolocationSnackbarSuccess(true);
     }
 
     function error(err) {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
+        console.log(`ERROR(${err.code}): ${err.message}`)
+        setGeolocationSnackbarError(true);
+    }
+
+    function handleClick() {
+        navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
     // TODO: inverse geolocation to be done in backend
-    const [showGeolocationSnackbar, setGeolocationSnackbar] = React.useState(false);
+    const [showGeolocationSnackbarSuccess, setGeolocationSnackbarSuccess] = React.useState(false);
+    const [showGeolocationSnackbarError, setGeolocationSnackbarError] = React.useState(false);
     return ( // <> is short for <React.Fragment>
         <>
             <StyledGeoButton
@@ -40,13 +46,21 @@ export default function Geolocation() {
                 startIcon={<RoomIcon />}
                 variant="contained"
                 color="primary"
-                // onClick={navigator.geolocation.getCurrentPosition(success, error, options)}
+                onClick={handleClick}
             >
                 Match my location
             </StyledGeoButton >
             <CustomSnackbar
-            show={showGeolocationSnackbar}
-            setSnackbar={setGeolocationSnackbar}
+            show={showGeolocationSnackbarError}
+            setSnackbar={setGeolocationSnackbarError}
+            type='error'
+            msg={'An error occured while retrieving local weather conditions!'}
+            />
+            <CustomSnackbar
+            show={showGeolocationSnackbarSuccess}
+            setSnackbar={setGeolocationSnackbarSuccess}
+            type='success'
+            msg={'Successfully retrieved local weather conditions!'}
             />
         </>
     );

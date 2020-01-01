@@ -61,17 +61,6 @@ export default function LeftDrawer(props) {
         },
     };
     const inputLabel = React.useRef(null);
-    const [personName, setPersonName] = React.useState([]);
-
-    const handleChange = event => {
-        setPersonName(event.target.value);
-    };
-
-    const weatherStates = [
-        'Sunny',
-        'Clouds',
-        'Rainy'
-    ];
 
     return (
         <Drawer
@@ -98,15 +87,15 @@ export default function LeftDrawer(props) {
             </InputLabel>
                 <Select
                     multiple
-                    value={personName}
-                    onChange={handleChange}
+                    value={props.weatherFilter}
+                    onChange={props.changeWeatherFilter}
                     input={<Input />}
                     renderValue={selected => selected.join(', ')}
                     MenuProps={MenuProps}
                 >
-                    {weatherStates.map(name => (
+                    {props.weatherStates.map(name => (
                         <MenuItem key={name} value={name}>
-                            <Checkbox checked={personName.indexOf(name) > -1} />
+                            <Checkbox checked={props.weatherFilter.indexOf(name) > -1} />
                             <ListItemText primary={name} />
                         </MenuItem>
                     ))}
@@ -114,17 +103,20 @@ export default function LeftDrawer(props) {
             </FormControl>
             <RangeSlider
                 title="Temperature range"
-                range={[-60, 60]}
+                range={props.tempStartRange}
+                change={props.changeTempFilter}
                 unit="°C"
             />
             <RangeSlider
                 title="Humidity"
-                range={[0, 100]}
+                range={props.humidityStartRange}
+                change={props.changeHumidityFilter}
                 unit="%"
             />
             <RangeSlider
                 title="Wind speed"
-                range={[0, 100]}
+                range={props.windStartRange}
+                change={props.changeWindFilter}
                 unit="m/s"
             />
             <Geolocation />

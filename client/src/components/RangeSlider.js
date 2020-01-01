@@ -15,6 +15,7 @@ export default function RangeSlider(props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    props.change(event, newValue)
   };
 
   const marks = [
