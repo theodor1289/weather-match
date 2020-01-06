@@ -3,20 +3,58 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Bar from './Bar';
 import LeftDrawer from './LeftDrawer';
 import Content from './Content';
+import axios from 'axios';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
 
+function importAll(image) {
+  return image.keys().map(image);
+}
+
+const atmosphere = importAll(require.context('../assets/Atmosphere/', false, /\.(png|jpe?g|svg)$/));
+const clear = importAll(require.context('../assets/Clear/Day/', false, /\.(png|jpe?g|svg)$/));
+const clouds = importAll(require.context('../assets/Clouds/Day/', false, /\.(png|jpe?g|svg)$/));
+const rain = importAll(require.context('../assets/Rain/', false, /\.(png|jpe?g|svg)$/));
+const snow = importAll(require.context('../assets/Snow/', false, /\.(png|jpe?g|svg)$/));
+const thunderstorm = importAll(require.context('../assets/Thunderstorm/', false, /\.(png|jpe?g|svg)$/));
+
+function getCorrectWeatherImg(weather) {
+  function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  switch (weather) {
+    case "Clear":
+      return clear[getRndInteger(0, clear.length - 1)];
+    case "Clouds":
+      return clouds[getRndInteger(0, clouds.length - 1)];
+    case "Rain":
+      return rain[getRndInteger(0, rain.length - 1)];
+    case "Drizzle":
+      return rain[getRndInteger(0, rain.length - 1)];
+    case "Snow":
+      return snow[getRndInteger(0, snow.length - 1)];
+    case "Thunderstorm":
+      return thunderstorm[getRndInteger(0, thunderstorm.length - 1)];
+    default:
+      return atmosphere[getRndInteger(0, atmosphere.length - 1)];
+  }
+}
+
 const TEMP_STARTRANGE = [-60, 60];
 const HUMIDITY_STARTRANGE = [0, 100];
 const WIND_STARTRANGE = [0, 100];
 const WEATHER_STATES = [
-  'Sunny',
+  'Clear',
   'Clouds',
-  'Rainy'
+  'Rain',
+  'Drizzle',
+  'Snow',
+  'Thunderstorm',
+  'Atmosphere'
 ];
-
 
 const lightTheme = createMuiTheme({
   palette: {
@@ -101,18 +139,20 @@ class App extends Component {
   };
 
   componentDidMount() {
-    fetch('./test-cities.json')
-      .then(response => response.json())
-      .then(result => {
-        const listOfCities = result.map((item, index) => {
-          item.cityId = index;
+    const url = './test-cities.json';
+    
+    axios.get(url)
+      .then((response) => {
+        const listOfCities = response.data.map((item, index) => {
+          item.image = getCorrectWeatherImg(item.main);
           this.setState({ lastIndex: index });
           return item;
         });
         this.setState({
           cities: listOfCities
         });
-      });
+      })
+      .catch((error => console.log(error)));
   }
 
   render() {

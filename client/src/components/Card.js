@@ -8,41 +8,16 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   card: {
-    maxWidth: 245,
+    maxWidth: 500,
   },
   media: {
     height: 100,
   },
 });
 
-function importAll(image) {
-  return image.keys().map(image);
-}
-
-const sunny = importAll(require.context('../assets/sunny/', false, /\.(png|jpe?g|svg)$/));
-const clouds = importAll(require.context('../assets/clouds/', false, /\.(png|jpe?g|svg)$/));
-const rainy = importAll(require.context('../assets/rainy/', false, /\.(png|jpe?g|svg)$/));
-
-function getCorrectWeatherImg(weather) {
-  switch(weather) {
-    case "Sunny":
-      return sunny[getRndInteger(0,sunny.length-1)];
-    case "Clouds":
-      return clouds[getRndInteger(0,clouds.length-1)];
-    case "Rainy":
-      return rainy[getRndInteger(0,rainy.length-1)];
-    default:
-      // code block
-  }
-}
-
-function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-
 // This is a Stateless Functional Component, which is simpler than a class.
 // It only can render props and it should only do that.
-export default function CityCard({city}) { 
+export default function CityCard({ city }) {
   const classes = useStyles();
 
   return (
@@ -50,7 +25,7 @@ export default function CityCard({city}) {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={getCorrectWeatherImg(city.main)}
+          image={city.image}
           title={city.main}
         />
         <CardContent>

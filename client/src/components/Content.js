@@ -46,7 +46,7 @@ export default function Content(props) {
             <div className={classes.drawerHeader} />
             <Grid container justify="center" spacing={3}>
                 {props.filteredCities.map(cityIter => (
-                    <Grid key={cityIter.cityId} item>
+                    <Grid key={cityIter.id} item>
                         <CityCard
                             city={cityIter}
                         />

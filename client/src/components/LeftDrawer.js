@@ -8,13 +8,11 @@ import Drawer from '@material-ui/core/Drawer';
 import RangeSlider from './RangeSlider';
 import Geolocation from './Geolocation';
 import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import ListItemText from '@material-ui/core/ListItemText';
-import InputLabel from '@material-ui/core/InputLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const drawerWidth = 300;
 
@@ -50,18 +48,6 @@ export default function LeftDrawer(props) {
     const classes = useStyles(300);
     const theme = useTheme();
 
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 125,
-            },
-        },
-    };
-    const inputLabel = React.useRef(null);
-
     return (
         <Drawer
             className={classes.drawer}
@@ -81,25 +67,26 @@ export default function LeftDrawer(props) {
                 </IconButton>
             </div>
             <Divider />
-            <FormControl variant="outlined" className={"m-auto my-2 " + classes.formControl}>
-                <InputLabel ref={inputLabel}>
-                    Weather
-            </InputLabel>
-                <Select
-                    multiple
-                    value={props.weatherFilter}
-                    onChange={props.changeWeatherFilter}
-                    input={<Input />}
-                    renderValue={selected => selected.join(', ')}
-                    MenuProps={MenuProps}
-                >
+            <FormControl
+            className={"m-auto my-2 " + classes.formControl}
+            >
+                <FormLabel component="legend">Weather type</FormLabel>
+                <FormGroup>
                     {props.weatherStates.map(name => (
-                        <MenuItem key={name} value={name}>
-                            <Checkbox checked={props.weatherFilter.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                        </MenuItem>
+                        <FormControlLabel
+                            key={name}
+                            control={
+                                <Checkbox
+                                    checked={props.weatherFilter.indexOf(name) > -1}
+                                    onChange={props.changeWeatherFilter}
+                                    value={name}
+                                    color="primary"
+                                />
+                            }
+                            label={name}
+                        />
                     ))}
-                </Select>
+                </FormGroup>
             </FormControl>
             <RangeSlider
                 title="Temperature range"
