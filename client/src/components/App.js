@@ -3,6 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Bar from './Bar';
 import LeftDrawer from './LeftDrawer';
 import Content from './Content';
+import Scroll from './Scroll';
 import axios from 'axios';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -53,7 +54,7 @@ const WEATHER_STATES = [
   'Drizzle',
   'Snow',
   'Thunderstorm',
-  'Atmosphere'
+  'Other'
 ];
 
 const lightTheme = createMuiTheme({
@@ -115,8 +116,11 @@ class App extends Component {
   }
 
   changeWeatherFilter = (event) => {
+    const toggleOn = this.state.weatherFilter.indexOf(event.target.value) === -1;
     this.setState({
-      weatherFilter: event.target.value
+      weatherFilter: toggleOn ?
+        this.state.weatherFilter.concat(event.target.value) :
+        this.state.weatherFilter.filter(weatherState => weatherState !== event.target.value),
     });
   };
 
@@ -140,7 +144,7 @@ class App extends Component {
 
   componentDidMount() {
     const url = './test-cities.json';
-    
+
     axios.get(url)
       .then((response) => {
         const listOfCities = response.data.map((item, index) => {
@@ -186,32 +190,35 @@ class App extends Component {
       });
 
     return (
-      <ThemeProvider theme={this.state.appTheme === 'light' ? lightTheme : darkTheme}>
-        <CssBaseline />
-        <Bar
-          toggleDrawer={this.toggleDrawer}
-          drawerIsOpen={this.state.drawerIsOpen}
-          searchCities={this.searchCities}
-          changeTheme={this.changeTheme}
-        />
-        <LeftDrawer
-          drawerIsOpen={this.state.drawerIsOpen}
-          toggleDrawer={this.toggleDrawer}
-          weatherFilter={this.state.weatherFilter}
-          changeWeatherFilter={this.changeWeatherFilter}
-          weatherStates={WEATHER_STATES}
-          tempStartRange={TEMP_STARTRANGE}
-          changeTempFilter={this.changeTempFilter}
-          humidityStartRange={HUMIDITY_STARTRANGE}
-          changeHumidityFilter={this.changeHumidityFilter}
-          windStartRange={WIND_STARTRANGE}
-          changeWindFilter={this.changeWindFilter}
-        />
-        <Content
+      <>
+        <ThemeProvider theme={this.state.appTheme === 'light' ? lightTheme : darkTheme}>
+          <CssBaseline />
+          <Bar
+            toggleDrawer={this.toggleDrawer}
+            drawerIsOpen={this.state.drawerIsOpen}
+            searchCities={this.searchCities}
+            changeTheme={this.changeTheme}
+          />
+          <LeftDrawer
+            drawerIsOpen={this.state.drawerIsOpen}
+            toggleDrawer={this.toggleDrawer}
+            weatherFilter={this.state.weatherFilter}
+            changeWeatherFilter={this.changeWeatherFilter}
+            weatherStates={WEATHER_STATES}
+            tempStartRange={TEMP_STARTRANGE}
+            changeTempFilter={this.changeTempFilter}
+            humidityStartRange={HUMIDITY_STARTRANGE}
+            changeHumidityFilter={this.changeHumidityFilter}
+            windStartRange={WIND_STARTRANGE}
+            changeWindFilter={this.changeWindFilter}
+          />
+          {/* <Content
           drawerIsOpen={this.state.drawerIsOpen}
           filteredCities={filteredCities}
-        />
-      </ThemeProvider>
+        /> */}
+        </ThemeProvider>
+        <Scroll></Scroll>
+      </>
     );
   }
 }

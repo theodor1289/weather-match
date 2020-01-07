@@ -42,7 +42,7 @@ export default function Geolocation() {
     return ( // <> is short for <React.Fragment>
         <>
             <StyledGeoButton
-                className={"m-auto my-2"}
+                className={"mb-4 mx-auto mt-auto"}
                 startIcon={<RoomIcon />}
                 variant="contained"
                 color="primary"

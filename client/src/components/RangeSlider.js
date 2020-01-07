@@ -30,7 +30,7 @@ export default function RangeSlider(props) {
   ];
 
   return (
-    <div className={"m-auto my-2 " + classes.root}>
+    <div className={"m-auto " + classes.root}>
       <Typography id="range-slider" gutterBottom>
         {props.title}
       </Typography>

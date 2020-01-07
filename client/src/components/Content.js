@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import CityCard from './Card';
+import CityCard from './CityCard';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
