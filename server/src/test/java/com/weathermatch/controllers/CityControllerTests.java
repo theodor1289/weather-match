@@ -48,7 +48,7 @@ public class CityControllerTests {
     private String endpoint = "/api/v1/city";
     private String nonexistentID = "123456789";
     private String errorID = "123456";
-    private Weather cloudyWeather = new Weather("Clouds", 15.6, 46d, 57d);
+    private Weather cloudyWeather = new Weather("Clouds", 15L, 46d, 57d);
     private Weather emptyWeather = new Weather(null, null, null, null);
     private City Bucharest = new City(6513L, "Bucharest", "Romania", 13.4, 15.4, cloudyWeather);
     private String BucharestJson = "{\"id\":6513,\"name\":\"Bucharest\",\"country\":\"Romania\",\"longitude\":13.4,\"latitude\":15.4,\"weather\":{\"main\":\"Clouds\",\"temperature\":15.6,\"humidity\":46.0,\"windspeed\":57.0}}";

@@ -2,6 +2,7 @@ package com.weathermatch.models;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Date;
 
 @Embeddable
 public class Weather {
@@ -9,7 +10,7 @@ public class Weather {
     private String main;
 
     @Column(name = "TEMPERATURE")
-    private Double temperature;
+    private Long temperature;
 
     @Column(name = "HUMIDITY")
     private Double humidity;
@@ -17,15 +18,19 @@ public class Weather {
     @Column(name = "WINDSPEED")
     private Double windspeed;
 
+    @Column(name = "TIMESTAMP")
+    private Date timestamp;
+
     protected Weather(){
 
     }
 
-    public Weather(String main, Double temperature, Double humidity, Double windspeed) {
+    public Weather(String main, Long temperature, Double humidity, Double windspeed, Date timestamp) {
         this.main = main;
         this.temperature = temperature;
         this.humidity = humidity;
         this.windspeed = windspeed;
+        this.timestamp = timestamp;
     }
 
     public String getMain() {
@@ -36,11 +41,11 @@ public class Weather {
         this.main = main;
     }
 
-    public Double getTemperature() {
+    public Long getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Double temperature) {
+    public void setTemperature(Long temperature) {
         this.temperature = temperature;
     }
 
@@ -58,5 +63,13 @@ public class Weather {
 
     public void setWindspeed(Double windspeed) {
         this.windspeed = windspeed;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

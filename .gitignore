@@ -1,3 +1,6 @@
+# API Keys
+server/src/main/resources/application.properties
+
 # Maven files
 log/
 target/

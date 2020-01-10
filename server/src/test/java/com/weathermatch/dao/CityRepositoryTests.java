@@ -21,10 +21,10 @@ public class CityRepositoryTests {
 //        cityRepository.flush();
 //        cityRepository.saveAndFlush(...);
 // TODO: remove those tests after implementing database OR create test database
-    private Weather cloudyWeather = new Weather("Clouds", 15.6, 46d, 57d);
-    private Weather rainyWeather = new Weather("Rainy", 11.9, 67d, 80d);
-    private Weather sunnyWeather = new Weather("Sunny", 25.2, 24d, 12d);
-    private Weather hazyWeather = new Weather("Haze", 23.4, 75d, 34d);
+    private Weather cloudyWeather = new Weather("Clouds", 15L, 46d, 57d);
+    private Weather rainyWeather = new Weather("Rainy", 11L, 67d, 80d);
+    private Weather sunnyWeather = new Weather("Sunny", 25L, 24d, 12d);
+    private Weather hazyWeather = new Weather("Haze", 23L, 75d, 34d);
     private City Bucharest = new City(6513L, "Bucharest", "Romania", 63.4, 35d, cloudyWeather);
     private City Iasi = new City(8945L, "Iasi", "Romania", 26.4, 55d, cloudyWeather);
     private City Edinburgh = new City(7524L, "Edinburgh", "Romania", 13.4, 45d, cloudyWeather);

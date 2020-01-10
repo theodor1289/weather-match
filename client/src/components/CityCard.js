@@ -8,7 +8,8 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   card: {
-    maxWidth: 500,
+    width: 150,
+    height: 300,
   },
   media: {
     height: 100,
@@ -26,7 +27,7 @@ export default function CityCard({ city }) {
         <CardMedia
           className={classes.media}
           image={city.image}
-          title={city.main}
+          title={city.weather.main}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -36,16 +37,16 @@ export default function CityCard({ city }) {
             Country: {city.country}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Weather: {city.main}
+            Weather: {city.weather.main}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Temperature: {city.temp} K
+            Temperature: {city.weather.temperature} °C
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Humidity: {city.humidity} %
+            Humidity: {city.weather.humidity} %
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Wind speed: {city.speed} m/s
+            Wind speed: {city.weather.windspeed} m/s
           </Typography>
         </CardContent>
       </CardActionArea>
