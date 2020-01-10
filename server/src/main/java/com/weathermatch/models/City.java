@@ -1,7 +1,8 @@
 package com.weathermatch.models;
 
 import javax.persistence.*;
-// TODO: add lon & lat properties here and in DatabaseBuilder to geolocate automatically
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "CITY")
 public class City {
@@ -21,20 +22,76 @@ public class City {
     @Column(name = "LATITUDE")
     private Double latitude;
 
-    @Embedded
-    private Weather weather;
+    @Column(name = "MAIN")
+    private String main;
+
+    @Column(name = "TEMPERATURE")
+    private Long temperature;
+
+    @Column(name = "HUMIDITY")
+    private Double humidity;
+
+    @Column(name = "WINDSPEED")
+    private Double windspeed;
+
+    @Column(name = "TIMESTAMP")
+    private Timestamp timestamp;
 
     protected City(){
 
     }
 
-    public City(Long id, String name, String country, Double longitude, Double latitude, Weather weather) {
+    public City(Long id, String name, String country, Double longitude, Double latitude, String main, Long temperature, Double humidity, Double windspeed, Timestamp timestamp) {
         this.id = id;
         this.name = name;
         this.country = country;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.weather = weather;
+        this.main = main;
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.windspeed = windspeed;
+        this.timestamp = timestamp;
+    }
+
+    public String getMain() {
+        return main;
+    }
+
+    public void setMain(String main) {
+        this.main = main;
+    }
+
+    public Long getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Long temperature) {
+        this.temperature = temperature;
+    }
+
+    public Double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(Double humidity) {
+        this.humidity = humidity;
+    }
+
+    public Double getWindspeed() {
+        return windspeed;
+    }
+
+    public void setWindspeed(Double windspeed) {
+        this.windspeed = windspeed;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public Double getLongitude() {
@@ -75,13 +132,5 @@ public class City {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public Weather getWeather() {
-        return weather;
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
     }
 }

@@ -8,11 +8,11 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   card: {
-    width: 150,
-    height: 300,
+    width: 200,
+    height: 320,
   },
   media: {
-    height: 100,
+    height: 115,
   },
 });
 
@@ -27,26 +27,32 @@ export default function CityCard({ city }) {
         <CardMedia
           className={classes.media}
           image={city.image}
-          title={city.weather.main}
+          title={city.main}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {city.name}
+          <Typography noWrap gutterBottom variant={"h6"} component="h2">
+              {city.name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             Country: {city.country}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Weather: {city.weather.main}
+            Weather: {city.main}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Temperature: {city.weather.temperature} °C
+            Temperature: {city.temperature} °C
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Humidity: {city.weather.humidity} %
+            Humidity: {city.humidity} %
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Wind speed: {city.weather.windspeed} m/s
+            Wind speed: {city.windspeed} m/s
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Date: {city.timestamp.substring(0, 10)}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Time: {city.timestamp.substring(11, 16)}
           </Typography>
         </CardContent>
       </CardActionArea>

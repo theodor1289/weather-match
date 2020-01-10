@@ -2,7 +2,6 @@ package com.weathermatch.services;
 
 import com.weathermatch.models.City;
 import com.weathermatch.dao.CityRepository;
-import com.weathermatch.models.Weather;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,7 +20,6 @@ public class H2DatabaseManagerImpl {
     // (NAME, COUNTRY) pair is not always unique in database, check Clark County in city-list.json
 
     private static final Logger logger = LoggerFactory.getLogger(H2DatabaseManagerImpl.class);
-    private final Weather emptyWeather = new Weather(null, null, null, null);
     private static final String CITY_JSON_FILE = "src/main/resources/city-list.json";
 
     @Autowired
@@ -65,7 +63,7 @@ public class H2DatabaseManagerImpl {
                         lat = Double.valueOf(aux);
                     }
 
-                    cityRepository.save(new City(id, name, country, lon, lat, emptyWeather));
+                    cityRepository.save(new City(id, name, country, lon, lat, null, null, null, null, null));
                 }
             }
         } catch (ParseException err){

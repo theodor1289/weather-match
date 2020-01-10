@@ -2,7 +2,6 @@ package com.weathermatch.controllers;
 
 import com.weathermatch.models.City;
 import com.weathermatch.dao.CityRepository;
-import com.weathermatch.models.Weather;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 import static org.hamcrest.Matchers.*;
@@ -45,18 +45,17 @@ public class CityControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    private String endpoint = "/api/v1/city";
+    private String endpoint_cityId = "/api/v1/city";
+    private String endpoint_cities = "/api/v1/cities";
     private String nonexistentID = "123456789";
     private String errorID = "123456";
-    private Weather cloudyWeather = new Weather("Clouds", 15L, 46d, 57d);
-    private Weather emptyWeather = new Weather(null, null, null, null);
-    private City Bucharest = new City(6513L, "Bucharest", "Romania", 13.4, 15.4, cloudyWeather);
-    private String BucharestJson = "{\"id\":6513,\"name\":\"Bucharest\",\"country\":\"Romania\",\"longitude\":13.4,\"latitude\":15.4,\"weather\":{\"main\":\"Clouds\",\"temperature\":15.6,\"humidity\":46.0,\"windspeed\":57.0}}";
-    private City Iasi = new City(8945L, "Iasi", "Romania",13.463, 18.4, cloudyWeather);
-    private String IasiJson = "{\"id\":8945,\"name\":\"Iasi\",\"country\":\"Romania\",\"longitude\":13.463,\"latitude\":18.4,\"weather\":{\"main\":\"Clouds\",\"temperature\":15.6,\"humidity\":46.0,\"windspeed\":57.0}}";
-    private City Edinburgh = new City(7524L, "Edinburgh", "Romania",24.4, 63.4, cloudyWeather);
-    private String EdinburghJson = "{\"id\":7524,\"name\":\"Edinburgh\",\"country\":\"Romania\",\"longitude\":24.4,\"latitude\":63.4,\"weather\":{\"main\":\"Clouds\",\"temperature\":15.6,\"humidity\":46.0,\"windspeed\":57.0}}";
-    private City Giesdorf = new City(2920572L, "Giesdorf", "DE",11.4, 41d, emptyWeather);
+    private City Bucharest = new City(6513L, "Bucharest", "Romania", 13.4, 15.4, "Clouds", 15L, 46d, 57d, new Timestamp(new Timestamp(new java.util.Date(0).getTime()).getTime()));
+    private String BucharestJson = "{\"id\":6513,\"name\":\"Bucharest\",\"country\":\"Romania\",\"longitude\":13.4,\"latitude\":15.4,\"main\":\"Clouds\",\"temperature\":15,\"humidity\":46.0,\"windspeed\":57.0,\"timestamp\":\"1970-01-01T00:00:00.000+0000\"}";
+    private City Iasi = new City(8945L, "Iasi", "Romania",13.463, 18.4, "Clouds", 15L, 46d, 57d, new Timestamp(new java.util.Date(0).getTime()));
+    private String IasiJson = "{\"id\":8945,\"name\":\"Iasi\",\"country\":\"Romania\",\"longitude\":13.463,\"latitude\":18.4,\"main\":\"Clouds\",\"temperature\":15,\"humidity\":46.0,\"windspeed\":57.0,\"timestamp\":\"1970-01-01T00:00:00.000+0000\"}";
+    private City Edinburgh = new City(7524L, "Edinburgh", "Romania",24.4, 63.4, "Clouds", 15L, 46d, 57d, new Timestamp(new java.util.Date(0).getTime()));
+    private String EdinburghJson = "{\"id\":7524,\"name\":\"Edinburgh\",\"country\":\"Romania\",\"longitude\":24.4,\"latitude\":63.4,\"main\":\"Clouds\",\"temperature\":15,\"humidity\":46.0,\"windspeed\":57.0,\"timestamp\":\"1970-01-01T00:00:00.000+0000\"}";
+    private City Giesdorf = new City(2920572L, "Giesdorf", "DE",11.4, 41d, null, null, null, null, new Timestamp(new java.util.Date(0).getTime()));
 
     @Before
     public void Setup() {
@@ -73,37 +72,37 @@ public class CityControllerTests {
 
     @Test
     public void GetWeatherWithMockMVC_Bucharest_Success() throws Exception {
-        this.mockMvc.perform(get(endpoint + "?id=" + Bucharest.getId())).andExpect(status().isOk())
+        this.mockMvc.perform(get(endpoint_cityId + "?id=" + Bucharest.getId())).andExpect(status().isOk())
                 .andExpect(content().string(equalTo(BucharestJson)));
     }
 
     @Test
     public void GetWeatherWithMockMVC_Iasi_Success() throws Exception {
-        this.mockMvc.perform(get(endpoint + "?id=" + Iasi.getId())).andExpect(status().isOk())
+        this.mockMvc.perform(get(endpoint_cityId + "?id=" + Iasi.getId())).andExpect(status().isOk())
                 .andExpect(content().string(equalTo(IasiJson)));
     }
 
     @Test
     public void GetWeatherWithMockMVC_Edinburgh_Success() throws Exception {
-        this.mockMvc.perform(get(endpoint + "?id=" + Edinburgh.getId())).andExpect(status().isOk())
+        this.mockMvc.perform(get(endpoint_cityId + "?id=" + Edinburgh.getId())).andExpect(status().isOk())
                 .andExpect(content().string(equalTo(EdinburghJson)));
     }
 
     @Test
     public void GetWeatherWithMockMVC_NotUpdated_Success() throws Exception {
-        this.mockMvc.perform(get(endpoint + "?id=" + Giesdorf.getId())).andExpect(status().isNoContent())
+        this.mockMvc.perform(get(endpoint_cityId + "?id=" + Giesdorf.getId())).andExpect(status().isNoContent())
                 .andExpect(content().string(equalTo("")));
     }
 
     @Test
     public void GetWeatherWithMockMVC_Nonexistent_Fail() throws Exception {
-        this.mockMvc.perform(get(endpoint + "?id=" + nonexistentID)).andExpect(status().isNotFound())
+        this.mockMvc.perform(get(endpoint_cityId + "?id=" + nonexistentID)).andExpect(status().isNotFound())
                 .andExpect(content().string(equalTo("")));
     }
 
     @Test
     public void GetWeather_Bucharest_Success() throws Exception {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort())
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort(endpoint_cityId))
                 .queryParam("id", Bucharest.getId());
         ResponseEntity<String> response = restTemplate.exchange(
                 builder.toUriString(),
@@ -115,7 +114,7 @@ public class CityControllerTests {
 
     @Test
     public void GetWeather_NonexistentId_Fail() {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort())
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort(endpoint_cityId))
                 .queryParam("id", nonexistentID);
         ResponseEntity<String> response = restTemplate.exchange(
                 builder.toUriString(),
@@ -128,7 +127,7 @@ public class CityControllerTests {
 
     @Test
     public void GetWeather_NotUpdated_Success() {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort())
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort(endpoint_cityId))
                 .queryParam("id", Giesdorf.getId());
         ResponseEntity<String> response = restTemplate.exchange(
                 builder.toUriString(),
@@ -142,7 +141,7 @@ public class CityControllerTests {
     // TODO: figure out why this is 404 and not 500
     @Test
     public void GetWeather_Exception_Fail() {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort())
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort(endpoint_cityId))
                 .queryParam("id", errorID);
         ResponseEntity<String> response = restTemplate.exchange(
                 builder.toUriString(),
@@ -155,7 +154,7 @@ public class CityControllerTests {
 
     @Test
     public void GetWeather_EmptyId_Fail() {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort())
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURLWithPort(endpoint_cityId))
                 .queryParam("id", "");
         ResponseEntity<String> response = restTemplate.exchange(
                 builder.toUriString(),
@@ -166,7 +165,7 @@ public class CityControllerTests {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-    private String createURLWithPort() {
+    private String createURLWithPort(String endpoint) {
         return "http://localhost:" + port + endpoint;
     }
 }

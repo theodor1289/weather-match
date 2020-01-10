@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import CityCard from './CityCard';
+import Card from './StatusCard';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -35,6 +36,16 @@ const useStyles = makeStyles(theme => ({
 export default function Content(props) {
     const classes = useStyles();
 
+    function decideStatusCard(cityList, networkProblems, showLoader) {
+        if (cityList.length > 0 || showLoader)
+            return null;
+
+        if (networkProblems)
+            return <Card retry={props.retry} status="no_network" />;
+
+        return <Card retry={props.retry} status="no_results" />;
+    };
+
     return (
         <main // clsx is a tiny (223B) utility for constructing className strings conditionally
             className={clsx(
@@ -45,6 +56,7 @@ export default function Content(props) {
         >
             <div className={classes.drawerHeader} />
             <Grid container justify="center" spacing={3}>
+                {decideStatusCard(props.filteredCities, props.networkProblems, props.showLoader)}
                 {props.filteredCities.map(cityIter => (
                     <Grid key={cityIter.id} item>
                         <CityCard

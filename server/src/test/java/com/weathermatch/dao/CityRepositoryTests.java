@@ -1,13 +1,14 @@
 package com.weathermatch.dao;
 
 import com.weathermatch.models.City;
-import com.weathermatch.models.Weather;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.sql.Timestamp;
 
 import static org.junit.Assert.*;
 
@@ -21,16 +22,12 @@ public class CityRepositoryTests {
 //        cityRepository.flush();
 //        cityRepository.saveAndFlush(...);
 // TODO: remove those tests after implementing database OR create test database
-    private Weather cloudyWeather = new Weather("Clouds", 15L, 46d, 57d);
-    private Weather rainyWeather = new Weather("Rainy", 11L, 67d, 80d);
-    private Weather sunnyWeather = new Weather("Sunny", 25L, 24d, 12d);
-    private Weather hazyWeather = new Weather("Haze", 23L, 75d, 34d);
-    private City Bucharest = new City(6513L, "Bucharest", "Romania", 63.4, 35d, cloudyWeather);
-    private City Iasi = new City(8945L, "Iasi", "Romania", 26.4, 55d, cloudyWeather);
-    private City Edinburgh = new City(7524L, "Edinburgh", "Romania", 13.4, 45d, cloudyWeather);
-    private City Glasgow = new City(8542L, "Glasgow", "Romania", 51.4, 24d, rainyWeather);
-    private City London = new City(3452L, "London", "Romania", 13.1, 71d, rainyWeather);
-    private City SF = new City(1542L, "San Francisco", "Romania", 21.4, 15d, sunnyWeather);
+    private City Bucharest = new City(6513L, "Bucharest", "Romania", 63.4, 35d, "Clouds", 15L, 46d, 57d, new Timestamp(System.currentTimeMillis()));
+    private City Iasi = new City(8945L, "Iasi", "Romania", 26.4, 55d, "Clouds", 15L, 46d, 57d, new Timestamp(System.currentTimeMillis()));
+    private City Edinburgh = new City(7524L, "Edinburgh", "Romania", 13.4, 45d, "Clouds", 15L, 46d, 57d, new Timestamp(System.currentTimeMillis()));
+    private City Glasgow = new City(8542L, "Glasgow", "Romania", 51.4, 24d, "Rainy", 11L, 67d, 80d, new Timestamp(System.currentTimeMillis()));
+    private City London = new City(3452L, "London", "Romania", 13.1, 71d, "Rainy", 11L, 67d, 80d, new Timestamp(System.currentTimeMillis()));
+    private City SF = new City(1542L, "San Francisco", "Romania", 21.4, 15d, "Sunny", 25L, 24d, 12d, new Timestamp(System.currentTimeMillis()));
 
     @Before
     public void Setup(){
@@ -45,18 +42,10 @@ public class CityRepositoryTests {
     @Test
     public void CityRepository_DuplicateIds_NotAdded() {
         assertEquals(6, cityRepository.findAll().size());
-        cityRepository.save(new City(1542L, "Duplicate", "Duplicate",11.4, 85d,  cloudyWeather));
-        cityRepository.save(new City(1542L, "Duplicate 2", "Duplicate 2",32.4, 78d,  rainyWeather));
-        cityRepository.save(new City(7524L, "Duplicate 3", "Duplicate 3",2.34, 15d,  sunnyWeather));
+        cityRepository.save(new City(1542L, "Duplicate", "Duplicate",11.4, 85d,  "Rain", 23L, 75d, 34d, new Timestamp(System.currentTimeMillis())));
+        cityRepository.save(new City(1542L, "Duplicate 2", "Duplicate 2",32.4, 78d,  "Clouds", 23L, 75d, 34d, new Timestamp(System.currentTimeMillis())));
+        cityRepository.save(new City(7524L, "Duplicate 3", "Duplicate 3",2.34, 15d,  "Haze", 23L, 75d, 34d, new Timestamp(System.currentTimeMillis())));
         assertEquals(6, cityRepository.findAll().size());
-    }
-
-    @Test
-    public void CityRepository_WeatherQueries_Success() {
-        assertEquals(3, cityRepository.findAllByWeather(cloudyWeather).size());
-        assertEquals(2, cityRepository.findAllByWeather(rainyWeather).size());
-        assertEquals(1, cityRepository.findAllByWeather(sunnyWeather).size());
-        assertEquals(0, cityRepository.findAllByWeather(hazyWeather).size());
     }
 
     @Test

@@ -3,19 +3,17 @@ package com.weathermatch.services;
 import com.weathermatch.dtos.OpenWeatherMapDto;
 import com.weathermatch.models.City;
 import com.weathermatch.dao.CityRepository;
-import com.weathermatch.models.Weather;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.data.auditing.CurrentDateTimeProvider;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +44,18 @@ public class WeatherServiceImpl implements WeatherService {
 
             // populate the models
             assert openWeatherMapDto != null;
-            Weather weatherModel = new Weather(openWeatherMapDto.getWeather().getMain(), Math.round(openWeatherMapDto.getMain().getTemp()), openWeatherMapDto.getMain().getHumidity(), openWeatherMapDto.getWind().getSpeed(), new java.util.Date());
-            City cityModel = new City(openWeatherMapDto.getId(), openWeatherMapDto.getName(), openWeatherMapDto.getSys().getCountry(), openWeatherMapDto.getCoord().getLon(), openWeatherMapDto.getCoord().getLat(), weatherModel);
+            City cityModel = new City(
+                    openWeatherMapDto.getId(),
+                    openWeatherMapDto.getName(),
+                    openWeatherMapDto.getSys().getCountry(),
+                    openWeatherMapDto.getCoord().getLon(),
+                    openWeatherMapDto.getCoord().getLat(),
+                    openWeatherMapDto.getWeather().getMain(),
+                    Math.round(openWeatherMapDto.getMain().getTemp()),
+                    openWeatherMapDto.getMain().getHumidity(),
+                    openWeatherMapDto.getWind().getSpeed(),
+                    new Timestamp(System.currentTimeMillis())
+            );
 
             // update the data
             cityRepository.save(cityModel);

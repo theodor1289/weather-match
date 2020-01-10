@@ -6,6 +6,8 @@ import Content from './Content';
 import getCorrectWeatherImage from '../utils/AssetImporter';
 import axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
+// import NavigateBefore from '@material-ui/icons/NavigateBefore';
+// import NavigateNext from '@material-ui/icons/NavigateNext';
 
 import { ThemeProvider } from '@material-ui/core/styles';
 import { lightTheme, darkTheme } from '../utils/Themes';
@@ -25,6 +27,8 @@ const WEATHER_STATES = [
 const api = {
   baseUrl: 'http://localhost:8080'
 };
+const CancelToken = axios.CancelToken;
+var cancel;
 
 class App extends Component {
   constructor() {
@@ -41,6 +45,7 @@ class App extends Component {
       tempFilter: TEMP_STARTRANGE,
       humidityFilter: HUMIDITY_STARTRANGE,
       windFilter: WIND_STARTRANGE,
+      networkProblems: true
     };
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.searchCities = this.searchCities.bind(this);
@@ -65,7 +70,11 @@ class App extends Component {
   }
 
   searchCities(query) {
-    this.setState({ queryText: query });
+    this.setState({
+      queryText: query
+    }, function () {
+      this.loadItems();
+    });
   }
 
   changeWeatherFilter = (event) => {
@@ -74,24 +83,32 @@ class App extends Component {
       weatherFilter: toggleOn ?
         this.state.weatherFilter.concat(event.target.value) :
         this.state.weatherFilter.filter(weatherState => weatherState !== event.target.value),
+    }, function () {
+      this.loadItems();
     });
   };
 
   changeTempFilter = (_event, newValue) => {
     this.setState({
       tempFilter: newValue
+    }, function () {
+      this.loadItems();
     });
   };
 
   changeHumidityFilter = (_event, newValue) => {
     this.setState({
       humidityFilter: newValue
+    }, function () {
+      this.loadItems();
     });
   };
 
   changeWindFilter = (_event, newValue) => {
     this.setState({
       windFilter: newValue
+    }, function () {
+      this.loadItems();
     });
   };
 
@@ -100,26 +117,73 @@ class App extends Component {
   }
 
   loadItems() {
+    cancel && cancel();
+
     var url = api.baseUrl + '/api/v1/cities';
 
     this.setState({
       showLoader: true
     });
-
-    console.log(this.state.cities);
-    axios.get(url)
+    
+    axios.get(url, {
+      params: {
+        prefix: this.state.queryText,
+        humidity: this.state.humidityFilter[0],
+        humidity2: this.state.humidityFilter[1],
+        windspeed: this.state.windFilter[0],
+        windspeed2: this.state.windFilter[1],
+        temperature: this.state.tempFilter[0],
+        temperature2: this.state.tempFilter[1],
+        main: this.state.weatherFilter + '',
+      },
+      cancelToken: new CancelToken(function executor(c) {
+        // An executor function receives a cancel function as a parameter
+        cancel = c;
+      })
+    })
       .then((response) => {
+        if (response.status === 204) {
+          this.setState({
+            cities: [],
+            networkProblems : false
+          });
+          console.log("Made API call, no results found in the database.");
+          return;
+        }
+
         const listOfCities = response.data.map((item) => {
-          item.image = getCorrectWeatherImage(item.weather.main);
+          item.image = getCorrectWeatherImage(item.main);
           return item;
         });
-        console.log(listOfCities);
+
         this.setState({
           cities: listOfCities,
+          networkProblems : false
+        });
+
+        cancel = undefined;
+        console.log("Made API call, loaded the following cities:");
+        console.log(this.state.cities);
+      })
+      .catch((thrown) => {
+        if (axios.isCancel(thrown)) {
+          console.log('Request canceled');
+        } else {
+          // handle error
+          console.log('Error when loading items: ' + thrown.message);
+
+          if(thrown.message==='Network Error') {
+            this.setState({
+              networkProblems : true
+            });
+          }
+        }
+      })
+      .finally(() => {
+        this.setState({
           showLoader: false
         });
-      })
-      .catch((error => console.log(error)));
+      });
   }
 
   render() {
@@ -150,8 +214,11 @@ class App extends Component {
         <Content
           drawerIsOpen={this.state.drawerIsOpen}
           filteredCities={this.state.cities}
+          retry={this.loadItems}
+          networkProblems={this.state.networkProblems}
+          showLoader={this.state.showLoader}
         />
-        { this.state.showLoader ? <LinearProgress style={{flex: 1}} variant="query" /> : null }
+        {this.state.showLoader ? <LinearProgress style={{ position: "absolute", left: 0, right: 0, bottom: 0 }} variant="query" /> : null}
       </ThemeProvider>
     );
   }
