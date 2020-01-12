@@ -5,11 +5,16 @@ import com.weathermatch.dao.CityRepository;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.ServletException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +83,7 @@ public class CityController {
             @ApiResponse(code = 204, message = "City weather has not yet been updated"),
             @ApiResponse(code = 500, message = "Internal server error")})
     @GetMapping(value = "/cities")
-    public ResponseEntity<List<City>> getAllCities(
+    public ResponseEntity<Page<City>> getAllCities(
             @ApiParam(value = "String value representing the city name prefix", example = "Lon")
             @RequestParam @Valid String prefix,
             @ApiParam(value = "Double value representing the lower humidity range", example = "50")
@@ -94,12 +99,13 @@ public class CityController {
             @ApiParam(value = "Long value representing the upper temperature range", example = "30")
             @RequestParam @Valid Long temperature2,
             @ApiParam(value = "String representing the desired weather conditions", example = "Clouds,Rain")
-            @RequestParam @Valid String main
+            @RequestParam @Valid String main,
+            @PageableDefault(value=16) Pageable pageable
             ) {
         try {
             logger.info("getAllCities() - started");
 
-            List<City> response;
+            Page<City> response;
             Collection<String> weatherTypes = new ArrayList<>();
 
             if(main.isEmpty()) {
@@ -112,7 +118,7 @@ public class CityController {
                 weatherTypes.addAll(Arrays.asList("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Dust", "Ash", "Squall", "Tornado"));
             }
 
-            response = cityRepository.findAllByTimestampIsNotNullAndNameStartsWithAndHumidityBetweenAndWindspeedBetweenAndTemperatureBetweenAndMainIsIn(
+            response = cityRepository.findAllByTimestampIsNotNullAndNameStartsWithIgnoreCaseAndHumidityBetweenAndWindspeedBetweenAndTemperatureBetweenAndMainIsIn(
                     prefix,
                     humidity,
                     humidity2,
@@ -120,10 +126,9 @@ public class CityController {
                     windspeed2,
                     temperature,
                     temperature2,
-                    weatherTypes
+                    weatherTypes,
+                    pageable
             );
-
-            response = response.subList(0, Math.min(25, response.size()));
 
             if (response.isEmpty()) {
                 logger.info("getAllCities() - responded with No Content");
@@ -140,52 +145,42 @@ public class CityController {
         }
     }
 
-//    @ApiOperation(value = "Get weather details for city closest to given latitude and longitude")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Closest city has been retrieved", response = City.class),
-//            @ApiResponse(code = 204, message = "Could not find closest city. Database might be empty"),
-//            @ApiResponse(code = 400, message = "Bad request"),
-//            @ApiResponse(code = 500, message = "Internal server error")})
-//    @GetMapping(value = "/closestcity")
-//    public ResponseEntity<List<City>> getClosestCity(
-//            @ApiParam(value = "Double value representing the city's latitude", example = "65.53395")
-//            @RequestParam @Valid Double latitude,
-//            @ApiParam(value = "Double value representing the city's longitude", example = "32.53395")
-//            @RequestParam @Valid Double longitude
-//            ) {
-//        try {
-//            logger.info("getClosestCity() - started");
-//
-//            if (latitude == null || longitude == null) {
-//                logger.info("getClosestCity() - responded with Bad Request");
-//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-//            }
-//
-//            List<City> response = cityRepository.findAllByTimestampIsNotNullAndLatitudeNear(latitude);
-//
-//            if (response == null) {
-//                logger.info("getClosestCity() - responded with Not Found");
-//                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find closest city. Database might be empty");
-//            }
-//
-//            logger.info("getClosestCity() - responded with OK");
-//            return ResponseEntity.ok(response);
-//        } catch (ResponseStatusException ex){
-//            throw ex;
-//        } catch (Exception ex) {
-//            logger.error(String.format("getClosestCity() - responded with Internal Server Error. Exception message: %s", ex.getCause()));
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @ApiOperation(value = "Get weather details for city closest to given latitude and longitude")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Closest city has been retrieved", response = City.class),
+            @ApiResponse(code = 204, message = "Could not find closest city. Database might be empty"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error")})
+    @GetMapping(value = "/closestcity")
+    public ResponseEntity<List<City>> getClosestCity(
+            @ApiParam(value = "Double value representing the latitude", example = "65.53395")
+            @RequestParam @Valid Double latitude,
+            @ApiParam(value = "Double value representing the longitude", example = "32.53395")
+            @RequestParam @Valid Double longitude
+            ) {
+        try {
+            logger.info("getClosestCity() - started");
 
-    // TODO:  .sort((a, b) => {
-//     if (
-//       a[this.state.orderBy].toLowerCase() <
-//       b[this.state.orderBy].toLowerCase()
-//     ) {
-//       return this.state.orderDir === 'asc' ? -1 : 1;
-//     } else {
-//       return this.state.orderDir === 'asc' ? 1 : -1;
-//     }
-//   })
+            if (latitude == null || longitude == null) {
+                logger.info("getClosestCity() - responded with Bad Request");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+
+            List<City> response = cityRepository.findClosestCity(latitude, longitude);
+
+            if (response == null) {
+                logger.info("getClosestCity() - responded with Not Found");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find closest city. Database might be empty");
+            }
+
+            logger.info("getClosestCity() - responded with OK");
+            return ResponseEntity.ok(response);
+        } catch (ResponseStatusException ex){
+            throw ex;
+        } catch (Exception ex) {
+            logger.error(String.format("getClosestCity() - responded with Internal Server Error. Exception message: %s", ex.getCause()));
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

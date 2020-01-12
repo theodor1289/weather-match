@@ -78,7 +78,7 @@ MySnackbarContentWrapper.propTypes = {
 };
 
 export default function CustomSnackbar(props) {
-    const handleClose = (event, reason) => {
+    const handleClose = () => {
         props.setSnackbar(false);
     };
 

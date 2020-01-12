@@ -6,9 +6,10 @@ import Content from './Content';
 import getCorrectWeatherImage from '../utils/AssetImporter';
 import axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
-// import NavigateBefore from '@material-ui/icons/NavigateBefore';
+// import networkDelay from '../utils/Simulations';
+// TODO: import NavigateBefore from '@material-ui/icons/NavigateBefore';
 // import NavigateNext from '@material-ui/icons/NavigateNext';
-
+import { debounce } from "throttle-debounce";
 import { ThemeProvider } from '@material-ui/core/styles';
 import { lightTheme, darkTheme } from '../utils/Themes';
 
@@ -28,7 +29,7 @@ const api = {
   baseUrl: 'http://localhost:8080'
 };
 const CancelToken = axios.CancelToken;
-var cancel;
+var cancelLoadItemsCall;
 
 class App extends Component {
   constructor() {
@@ -45,7 +46,7 @@ class App extends Component {
       tempFilter: TEMP_STARTRANGE,
       humidityFilter: HUMIDITY_STARTRANGE,
       windFilter: WIND_STARTRANGE,
-      networkProblems: true
+      networkProblems: true // for StatusCard display
     };
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.searchCities = this.searchCities.bind(this);
@@ -55,6 +56,14 @@ class App extends Component {
     this.changeHumidityFilter = this.changeHumidityFilter.bind(this);
     this.changeWindFilter = this.changeWindFilter.bind(this);
     this.loadItems = this.loadItems.bind(this);
+
+    // App "waits" for 600 ms between calls of the below functions. This provides smoothness.
+    // Former approach was to cancel previous axios API requests, but setState was the real culprit.
+    const debounce_time = 600;
+    this.searchCities = debounce(debounce_time, this.searchCities);
+    this.changeTempFilter = debounce(debounce_time, this.changeTempFilter);
+    this.changeHumidityFilter = debounce(debounce_time, this.changeHumidityFilter);
+    this.changeWindFilter = debounce(debounce_time, this.changeWindFilter);
   }
 
   toggleDrawer() {
@@ -117,14 +126,14 @@ class App extends Component {
   }
 
   loadItems() {
-    cancel && cancel();
+    cancelLoadItemsCall && cancelLoadItemsCall();
 
     var url = api.baseUrl + '/api/v1/cities';
 
     this.setState({
       showLoader: true
     });
-    
+
     axios.get(url, {
       params: {
         prefix: this.state.queryText,
@@ -138,14 +147,16 @@ class App extends Component {
       },
       cancelToken: new CancelToken(function executor(c) {
         // An executor function receives a cancel function as a parameter
-        cancel = c;
+        cancelLoadItemsCall = c;
       })
     })
+      // .then(response => {throw new Error(response)}) // Uncomment to test network error
+      // .then(networkDelay(5000)) // Uncomment to simulate network delay
       .then((response) => {
         if (response.status === 204) {
           this.setState({
             cities: [],
-            networkProblems : false
+            networkProblems: false
           });
           console.log("Made API call, no results found in the database.");
           return;
@@ -158,28 +169,28 @@ class App extends Component {
 
         this.setState({
           cities: listOfCities,
-          networkProblems : false
+          networkProblems: false
         });
 
-        cancel = undefined;
         console.log("Made API call, loaded the following cities:");
         console.log(this.state.cities);
       })
       .catch((thrown) => {
         if (axios.isCancel(thrown)) {
-          console.log('Request canceled');
+          console.log('Request canceled.');
         } else {
           // handle error
           console.log('Error when loading items: ' + thrown.message);
 
-          if(thrown.message==='Network Error') {
+          if (thrown.message === 'Network Error') {
             this.setState({
-              networkProblems : true
+              networkProblems: true
             });
           }
         }
       })
       .finally(() => {
+        cancelLoadItemsCall = undefined;
         this.setState({
           showLoader: false
         });

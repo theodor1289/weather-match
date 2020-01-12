@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.Timestamp;
@@ -37,15 +38,6 @@ public class CityRepositoryTests {
         cityRepository.save(Glasgow);
         cityRepository.save(London);
         cityRepository.save(SF);
-    }
-
-    @Test
-    public void CityRepository_DuplicateIds_NotAdded() {
-        assertEquals(6, cityRepository.findAll().size());
-        cityRepository.save(new City(1542L, "Duplicate", "Duplicate",11.4, 85d,  "Rain", 23L, 75d, 34d, new Timestamp(System.currentTimeMillis())));
-        cityRepository.save(new City(1542L, "Duplicate 2", "Duplicate 2",32.4, 78d,  "Clouds", 23L, 75d, 34d, new Timestamp(System.currentTimeMillis())));
-        cityRepository.save(new City(7524L, "Duplicate 3", "Duplicate 3",2.34, 15d,  "Haze", 23L, 75d, 34d, new Timestamp(System.currentTimeMillis())));
-        assertEquals(6, cityRepository.findAll().size());
     }
 
     @Test
