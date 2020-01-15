@@ -8,7 +8,7 @@ import axios from 'axios';
 const CancelToken = axios.CancelToken;
 var cancelClosestCityCall;
 
-export default function Geolocation() {
+export default function Geolocation(props) {
     const theme = useTheme();
 
     const StyledGeoButton = styled(Button)({
@@ -21,15 +21,15 @@ export default function Geolocation() {
         maximumAge: 0
     };
 
-    function getClosestCity(latitude, longitude) {
+    function success(pos) {
         cancelClosestCityCall && cancelClosestCityCall();
 
-        var url = 'http://localhost:8080/api/v1/closestcity';
+        var crd = pos.coords;
 
-        axios.get(url, {
+        axios.get('http://localhost:8080/api/v1/closestcity', {
             params: {
-                latitude: latitude,
-                longitude: longitude
+                latitude: crd.latitude,
+                longitude: crd.longitude
             },
             cancelToken: new CancelToken(function executor(c) {
                 // An executor function receives a cancel function as a parameter
@@ -40,11 +40,21 @@ export default function Geolocation() {
             // .then(networkDelay(5000)) // Uncomment to simulate network delay
             .then((response) => {
                 if (response.status === 204) {
-                    console.log("Made API call, closest city could not be found in the database.");
-                    return;
+                    setSnackbarType('error');
+                    setSnackbarMessage('Closest city could not be found, database might be empty.');
                 }
-
-                console.log("Made API call, found the following closest city: " + response.data[0].name);
+                else {
+                    setSnackbarType('success');
+                    setSnackbarMessage(`Successfully retrieved local weather conditions for ${response.data.name}, ${response.data.country}!`);
+                    props.changeTemp(null, [response.data.temperature - 2, response.data.temperature + 2]);
+                    props.changeHumidity(null, [response.data.humidity - 2, response.data.humidity + 2]);
+                    props.changeWind(null, [response.data.windspeed - 2, response.data.windspeed + 2]);
+                    if (['Clear', 'Clouds', 'Rain', 'Drizzle', 'Snow', 'Thunderstorm'].indexOf(response.data.main) > -1)
+                        props.changeWeatherFilterToExclusively(response.data.main);
+                    else
+                        props.changeWeatherFilterToExclusively('Other');
+                }
+                setShowSnackbar(true);
             })
             .catch((thrown) => {
                 if (axios.isCancel(thrown)) {
@@ -52,6 +62,9 @@ export default function Geolocation() {
                 } else {
                     // handle error
                     console.log('Error when loading items: ' + thrown.message);
+                    setSnackbarType('error');
+                    setSnackbarMessage('A network connection to the weather database could not be established.');
+                    setShowSnackbar(true);
                 }
             })
             .finally(() => {
@@ -59,24 +72,20 @@ export default function Geolocation() {
             });
     }
 
-    function success(pos) {
-        var crd = pos.coords;
-        getClosestCity(crd.latitude, crd.longitude);
-        setGeolocationSnackbarSuccess(true);
-    }
-
     function error(err) {
         console.log(`ERROR(${err.code}): ${err.message}`)
-        setGeolocationSnackbarError(true);
+        setSnackbarType('error');
+        setSnackbarMessage('An error occured while retrieving GPS coordinates.')
+        setShowSnackbar(true);
     }
 
     function handleClick() {
         navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
-    // TODO: inverse geolocation to be done in backend
-    const [showGeolocationSnackbarSuccess, setGeolocationSnackbarSuccess] = React.useState(false);
-    const [showGeolocationSnackbarError, setGeolocationSnackbarError] = React.useState(false);
+    const [showSnackbar, setShowSnackbar] = React.useState(false);
+    const [snackbarType, setSnackbarType] = React.useState('info');
+    const [snackbarMessage, setSnackbarMessage] = React.useState('Currently this snackbar has not been configured.');
     return ( // <> is short for <React.Fragment>
         <>
             <StyledGeoButton
@@ -89,16 +98,10 @@ export default function Geolocation() {
                 Match my location
             </StyledGeoButton >
             <CustomSnackbar
-                show={showGeolocationSnackbarError}
-                setSnackbar={setGeolocationSnackbarError}
-                type='error'
-                msg={'An error occured while retrieving local weather conditions!'}
-            />
-            <CustomSnackbar
-                show={showGeolocationSnackbarSuccess}
-                setSnackbar={setGeolocationSnackbarSuccess}
-                type='success'
-                msg={`Successfully retrieved local weather conditions!`}
+                show={showSnackbar}
+                setSnackbar={setShowSnackbar}
+                type={snackbarType}
+                msg={snackbarMessage}
             />
         </>
     );

@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -9,19 +8,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import NoNetwork from '../assets/no_network.jpg';
 import NoResults from '../assets/no_results.jpg';
-
-const useStyles = makeStyles({
-  card: {
-    width: 200,
-    height: 320,
-  },
-  media: {
-    height: 115,
-  },
-});
+import { cardStyle } from '../utils/VisualConfiguration';
 
 export default function StatusCard({ status, retry }) {
-  const classes = useStyles();
+  const classes = cardStyle();
 
   return (
     <Card className={classes.card}>

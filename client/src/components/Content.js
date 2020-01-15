@@ -4,6 +4,11 @@ import CityCard from './CityCard';
 import Card from './StatusCard';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import NavigateBefore from '@material-ui/icons/NavigateBefore';
+import NavigateNext from '@material-ui/icons/NavigateNext';
+import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const drawerWidth = 300;
 
@@ -41,9 +46,13 @@ export default function Content(props) {
             return null;
 
         if (networkProblems)
-            return <Card retry={props.retry} status="no_network" />;
+            return <Grid item>
+                <Card retry={props.retry} status="no_network" />
+            </Grid>;
 
-        return <Card retry={props.retry} status="no_results" />;
+        return <Grid item>
+            <Card retry={props.retry} status="no_results" />
+               </Grid>;
     };
 
     return (
@@ -55,15 +64,43 @@ export default function Content(props) {
                 })}
         >
             <div className={classes.drawerHeader} />
-            <Grid container justify="center" spacing={3}>
-                {decideStatusCard(props.filteredCities, props.networkProblems, props.showLoader)}
-                {props.filteredCities.map(cityIter => (
-                    <Grid key={cityIter.id} item>
-                        <CityCard
-                            city={cityIter}
-                        />
-                    </Grid>
-                ))}
+            <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+                spacing={3}
+            >
+                <Grid container item justify="center" spacing={3}>
+                    {decideStatusCard(props.filteredCities, props.networkProblems, props.showLoader)}
+                    {props.filteredCities.map(cityIter => (
+                        <Grid key={cityIter.id} item>
+                            <CityCard
+                                city={cityIter}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+                {props.filteredCities.length > 0?
+                    <Grid item>
+                    <IconButton color="primary" onClick={props.navigateBefore}>
+                        <NavigateBefore />
+                    </IconButton>
+                    <Button
+                        variant="text"
+                        color="primary"
+                    >
+                        {(props.currentPage*props.pageSize)+1}-{Math.min(props.totalCities, (props.currentPage+1)*props.pageSize)} of {props.totalCities}
+                    </Button>
+                    <IconButton color="primary" onClick={props.navigateNext}>
+                        <NavigateNext />
+                    </IconButton>
+                </Grid> : null
+            }
+            {props.showLoader ?
+              <LinearProgress style={{ position: "fixed", left: 0, right: 0, bottom: 0 }} variant="query" />
+              :
+              null}
             </Grid>
         </main>
     );

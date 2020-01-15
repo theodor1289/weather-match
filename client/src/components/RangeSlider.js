@@ -11,12 +11,6 @@ const useStyles = makeStyles({
 
 export default function RangeSlider(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState([props.range[0], props.range[1]]);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    props.change(event, newValue)
-  };
 
   const marks = [
     {
@@ -35,8 +29,8 @@ export default function RangeSlider(props) {
         {props.title}
       </Typography>
       <Slider
-        value={value}
-        onChange={handleChange}
+        value={props.value}
+        onChange={props.handleChange}
         valueLabelDisplay="auto"
         aria-labelledby="range-slider"
         min={props.range[0]}

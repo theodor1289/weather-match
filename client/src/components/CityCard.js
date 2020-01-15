@@ -1,25 +1,15 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-
-const useStyles = makeStyles({
-  card: {
-    width: 200,
-    height: 320,
-  },
-  media: {
-    height: 115,
-  },
-});
+import { cardStyle } from '../utils/VisualConfiguration';
 
 // This is a Stateless Functional Component, which is simpler than a class.
 // It only can render props and it should only do that.
 export default function CityCard({ city }) {
-  const classes = useStyles();
+  const classes = cardStyle();
 
   return (
     <Card className={classes.card}>
@@ -56,14 +46,6 @@ export default function CityCard({ city }) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      {/* <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions> */}
     </Card>
   );
 }

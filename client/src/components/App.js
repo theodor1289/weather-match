@@ -5,13 +5,10 @@ import LeftDrawer from './LeftDrawer';
 import Content from './Content';
 import getCorrectWeatherImage from '../utils/AssetImporter';
 import axios from 'axios';
-import LinearProgress from '@material-ui/core/LinearProgress';
 // import networkDelay from '../utils/Simulations';
-// TODO: import NavigateBefore from '@material-ui/icons/NavigateBefore';
-// import NavigateNext from '@material-ui/icons/NavigateNext';
-import { debounce } from "throttle-debounce";
+import { debounce, throttle } from "throttle-debounce";
 import { ThemeProvider } from '@material-ui/core/styles';
-import { lightTheme, darkTheme } from '../utils/Themes';
+import { lightTheme, darkTheme } from '../utils/VisualConfiguration';
 
 const TEMP_STARTRANGE = [-60, 60];
 const HUMIDITY_STARTRANGE = [0, 100];
@@ -36,8 +33,6 @@ class App extends Component {
     super();
     this.state = {
       cities: [],
-      orderBy: 'name',
-      orderDir: 'asc',
       queryText: '',
       showLoader: false,
       drawerIsOpen: false,
@@ -46,7 +41,13 @@ class App extends Component {
       tempFilter: TEMP_STARTRANGE,
       humidityFilter: HUMIDITY_STARTRANGE,
       windFilter: WIND_STARTRANGE,
-      networkProblems: true // for StatusCard display
+      networkProblems: true,
+      totalCities: 0,
+      currentPage: 0,
+      totalPages: 0,
+      pageSize: 14,
+      sortCategory: "name",
+      sortType: "desc"
     };
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.searchCities = this.searchCities.bind(this);
@@ -56,10 +57,16 @@ class App extends Component {
     this.changeHumidityFilter = this.changeHumidityFilter.bind(this);
     this.changeWindFilter = this.changeWindFilter.bind(this);
     this.loadItems = this.loadItems.bind(this);
+    this.navigateBefore = this.navigateBefore.bind(this);
+    this.navigateNext = this.navigateNext.bind(this);
 
-    // App "waits" for 600 ms between calls of the below functions. This provides smoothness.
-    // Former approach was to cancel previous axios API requests, but setState was the real culprit.
-    const debounce_time = 600;
+    const throttle_time = 500;
+    this.navigateBefore = throttle(throttle_time, this.navigateBefore);
+    this.navigateNext = throttle(throttle_time, this.navigateNext);
+    this.changeWeatherFilter = throttle(300, this.changeWeatherFilter);
+
+    // App "waits" for 550 ms between calls of the below functions. This provides smoothness.
+    const debounce_time = 550;
     this.searchCities = debounce(debounce_time, this.searchCities);
     this.changeTempFilter = debounce(debounce_time, this.changeTempFilter);
     this.changeHumidityFilter = debounce(debounce_time, this.changeHumidityFilter);
@@ -78,6 +85,16 @@ class App extends Component {
     });
   }
 
+  navigateBefore() {
+    if (this.state.currentPage > 0)
+      this.loadItems(this.state.currentPage - 1);
+  }
+
+  navigateNext() {
+    if (this.state.currentPage < this.state.totalPages - 1)
+      this.loadItems(this.state.currentPage + 1);
+  }
+
   searchCities(query) {
     this.setState({
       queryText: query
@@ -86,18 +103,26 @@ class App extends Component {
     });
   }
 
-  changeWeatherFilter = (event) => {
-    const toggleOn = this.state.weatherFilter.indexOf(event.target.value) === -1;
+  changeWeatherFilter = (newValue) => {
+    const toggleOn = this.state.weatherFilter.indexOf(newValue) === -1;
     this.setState({
       weatherFilter: toggleOn ?
-        this.state.weatherFilter.concat(event.target.value) :
-        this.state.weatherFilter.filter(weatherState => weatherState !== event.target.value),
+        this.state.weatherFilter.concat(newValue) :
+        this.state.weatherFilter.filter(weatherState => weatherState !== newValue),
     }, function () {
       this.loadItems();
     });
   };
 
-  changeTempFilter = (_event, newValue) => {
+  changeWeatherFilterToExclusively = (newValue) => {
+    this.setState({
+      weatherFilter: [newValue]
+    }, function () {
+      this.loadItems();
+    });
+  };
+
+  changeTempFilter = (newValue) => {
     this.setState({
       tempFilter: newValue
     }, function () {
@@ -105,7 +130,7 @@ class App extends Component {
     });
   };
 
-  changeHumidityFilter = (_event, newValue) => {
+  changeHumidityFilter = (newValue) => {
     this.setState({
       humidityFilter: newValue
     }, function () {
@@ -113,7 +138,7 @@ class App extends Component {
     });
   };
 
-  changeWindFilter = (_event, newValue) => {
+  changeWindFilter = (newValue) => {
     this.setState({
       windFilter: newValue
     }, function () {
@@ -125,7 +150,7 @@ class App extends Component {
     this.loadItems();
   }
 
-  loadItems() {
+  loadItems(pageQuery) {
     cancelLoadItemsCall && cancelLoadItemsCall();
 
     var url = api.baseUrl + '/api/v1/cities';
@@ -144,6 +169,9 @@ class App extends Component {
         temperature: this.state.tempFilter[0],
         temperature2: this.state.tempFilter[1],
         main: this.state.weatherFilter + '',
+        page: pageQuery === undefined ? 0 : pageQuery,
+        size: this.state.pageSize,
+        sort: this.state.sortCategory + ',' + this.state.sortType
       },
       cancelToken: new CancelToken(function executor(c) {
         // An executor function receives a cancel function as a parameter
@@ -162,18 +190,18 @@ class App extends Component {
           return;
         }
 
-        const listOfCities = response.data.map((item) => {
+        const listOfCities = response.data.content.map((item) => {
           item.image = getCorrectWeatherImage(item.main);
           return item;
         });
 
         this.setState({
           cities: listOfCities,
-          networkProblems: false
+          networkProblems: false,
+          totalCities: response.data.totalElements,
+          currentPage: response.data.pageable.pageNumber,
+          totalPages: response.data.totalPages
         });
-
-        console.log("Made API call, loaded the following cities:");
-        console.log(this.state.cities);
       })
       .catch((thrown) => {
         if (axios.isCancel(thrown)) {
@@ -208,12 +236,14 @@ class App extends Component {
           drawerIsOpen={this.state.drawerIsOpen}
           searchCities={this.searchCities}
           changeTheme={this.changeTheme}
+          theme={this.state.appTheme}
         />
         <LeftDrawer
           drawerIsOpen={this.state.drawerIsOpen}
           toggleDrawer={this.toggleDrawer}
           weatherFilter={this.state.weatherFilter}
           changeWeatherFilter={this.changeWeatherFilter}
+          changeWeatherFilterToExclusively={this.changeWeatherFilterToExclusively}
           weatherStates={WEATHER_STATES}
           tempStartRange={TEMP_STARTRANGE}
           changeTempFilter={this.changeTempFilter}
@@ -221,15 +251,20 @@ class App extends Component {
           changeHumidityFilter={this.changeHumidityFilter}
           windStartRange={WIND_STARTRANGE}
           changeWindFilter={this.changeWindFilter}
+          networkProblems={this.state.networkProblems}
         />
         <Content
           drawerIsOpen={this.state.drawerIsOpen}
           filteredCities={this.state.cities}
-          retry={this.loadItems}
-          networkProblems={this.state.networkProblems}
+          retry={() => this.loadItems()}
           showLoader={this.state.showLoader}
+          totalCities={this.state.totalCities}
+          currentPage={this.state.currentPage}
+          pageSize={this.state.pageSize}
+          networkProblems={this.state.networkProblems}
+          navigateBefore={this.navigateBefore}
+          navigateNext={this.navigateNext}
         />
-        {this.state.showLoader ? <LinearProgress style={{ position: "absolute", left: 0, right: 0, bottom: 0 }} variant="query" /> : null}
       </ThemeProvider>
     );
   }

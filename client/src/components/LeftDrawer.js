@@ -47,6 +47,25 @@ export default function LeftDrawer(props) {
     const classes = useStyles();
     const theme = useTheme();
 
+    const [tempValue, setTempValue] = React.useState([props.tempStartRange[0], props.tempStartRange[1]]);
+    const [humidityValue, setHumidityValue] = React.useState([props.humidityStartRange[0], props.humidityStartRange[1]]);
+    const [windspeedValue, setWindspeedValue] = React.useState([props.windStartRange[0], props.windStartRange[1]]);
+
+    const handleTempChange = (_event, newValue) => {
+        setTempValue(newValue);
+        props.changeTempFilter(newValue)
+    };
+
+    const handleHumidityChange = (_event, newValue) => {
+        setHumidityValue(newValue);
+        props.changeHumidityFilter(newValue)
+    };
+
+    const handleWindspeedChange = (_event, newValue) => {
+        setWindspeedValue(newValue);
+        props.changeWindFilter(newValue)
+    };
+
     return (
         <Drawer
             className={classes.drawer}
@@ -77,7 +96,7 @@ export default function LeftDrawer(props) {
                             control={
                                 <Checkbox
                                     checked={props.weatherFilter.indexOf(name) > -1}
-                                    onChange={props.changeWeatherFilter}
+                                    onChange={(event) => props.changeWeatherFilter(event.target.value)}
                                     value={name}
                                     color="primary"
                                 />
@@ -90,22 +109,31 @@ export default function LeftDrawer(props) {
             <RangeSlider
                 title="Temperature range"
                 range={props.tempStartRange}
-                change={props.changeTempFilter}
+                handleChange={handleTempChange}
+                value={tempValue}
                 unit="°C"
             />
             <RangeSlider
-                title="Humidity"
+                title="Humidity range"
                 range={props.humidityStartRange}
-                change={props.changeHumidityFilter}
+                handleChange={handleHumidityChange}
+                value={humidityValue}
                 unit="%"
             />
             <RangeSlider
-                title="Wind speed"
+                title="Wind speed range"
                 range={props.windStartRange}
-                change={props.changeWindFilter}
+                handleChange={handleWindspeedChange}
+                value={windspeedValue}
                 unit="m/s"
             />
-            <Geolocation/>
+            <Geolocation
+                networkProblems={props.networkProblems}
+                changeTemp={handleTempChange}
+                changeHumidity={handleHumidityChange}
+                changeWind={handleWindspeedChange}
+                changeWeatherFilterToExclusively={props.changeWeatherFilterToExclusively}
+            />
         </Drawer>
     );
 }

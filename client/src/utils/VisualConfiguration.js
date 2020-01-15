@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import indigo from '@material-ui/core/colors/indigo';
 import pink from '@material-ui/core/colors/pink';
 
@@ -24,7 +24,18 @@ const darkTheme = createMuiTheme({
     },
 });
 
+const cardStyle = makeStyles({
+  card: {
+    width: 200,
+    height: 320,
+  },
+  media: {
+    height: 115,
+  },
+});
+
 export {
     lightTheme,
-    darkTheme
+    darkTheme,
+    cardStyle
 }

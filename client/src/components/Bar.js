@@ -9,6 +9,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
+import Sort from '@material-ui/icons/Sort';
+import BarPopover from './BarPopover';
 
 const drawerWidth = 300;
 
@@ -85,6 +88,13 @@ const useStyles = makeStyles(theme => ({
 export default function Bar(props) {
     const classes = useStyles();
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const handleClick = event => {
+        setAnchorEl(event.currentTarget);
+    };
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
     return (
         <AppBar
             position="fixed" // "fixed" => the app bar is always in view regardless of scroll
@@ -123,8 +133,22 @@ export default function Bar(props) {
                     onClick={props.changeTheme}
                     color="inherit"
                 >
-                    <Brightness4Icon />
+                    {props.theme === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
                 </IconButton>
+                <IconButton
+                    className={clsx(classes.menuButtonRight)}
+                    onClick={handleClick}
+                    color="inherit"
+                    aria-describedby={id}
+                >
+                    <Sort />
+                </IconButton>
+                <BarPopover
+                    setAnchorEl={setAnchorEl}
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                />
             </Toolbar>
         </AppBar>
     )
