@@ -6,7 +6,6 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.ServletException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,7 +98,7 @@ public class CityController {
             @RequestParam @Valid Long temperature2,
             @ApiParam(value = "String representing the desired weather conditions", example = "Clouds,Rain")
             @RequestParam @Valid String main,
-            @PageableDefault(value=16) Pageable pageable
+            @PageableDefault(value=12) Pageable pageable
             ) {
         try {
             logger.info("getAllCities() - started");
@@ -153,7 +151,7 @@ public class CityController {
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error")})
     @GetMapping(value = "/closestcity")
-    public ResponseEntity<List<City>> getClosestCity(
+    public ResponseEntity<City> getClosestCity(
             @ApiParam(value = "Double value representing the latitude", example = "65.53395")
             @RequestParam @Valid Double latitude,
             @ApiParam(value = "Double value representing the longitude", example = "32.53395")
@@ -167,11 +165,11 @@ public class CityController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
 
-            List<City> response = cityRepository.findClosestCity(latitude, longitude);
+            City response = cityRepository.findClosestCity(latitude, longitude);
 
             if (response == null) {
-                logger.info("getClosestCity() - responded with Not Found");
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find closest city. Database might be empty");
+                logger.info("getClosestCity() - responded with No Content");
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Could not find closest city. Database might be empty");
             }
 
             logger.info("getClosestCity() - responded with OK");

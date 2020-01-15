@@ -15,8 +15,8 @@ import java.util.List;
 public interface CityRepository extends PagingAndSortingRepository<City, String> {
     City findById(Long id);
 
-    @Query(value ="SELECT TOP 1 * FROM (SELECT * FROM CITY ORDER BY SQRT(POWER(ABS(LATITUDE - :inputLatitude), 2) + Power(ABS(LONGITUDE - :inputLongitude), 2)))", nativeQuery = true)
-    List<City> findClosestCity(
+    @Query(value ="SELECT TOP 1 * FROM (SELECT * FROM CITY WHERE TIMESTAMP IS NOT NULL ORDER BY SQRT(POWER(ABS(LATITUDE - :inputLatitude), 2) + Power(ABS(LONGITUDE - :inputLongitude), 2)))", nativeQuery = true)
+    City findClosestCity(
             @Param("inputLatitude") Double latitude,
             @Param("inputLongitude") Double longitude);
 
@@ -32,14 +32,3 @@ public interface CityRepository extends PagingAndSortingRepository<City, String>
             Pageable pageable
     );
 }
-
-// TODO:  .sort((a, b) => {
-//     if (
-//       a[this.state.orderBy].toLowerCase() <
-//       b[this.state.orderBy].toLowerCase()
-//     ) {
-//       return this.state.orderDir === 'asc' ? -1 : 1;
-//     } else {
-//       return this.state.orderDir === 'asc' ? 1 : -1;
-//     }
-//   })
