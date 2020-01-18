@@ -1,21 +1,24 @@
 package com.weathermatch.services;
 
+import com.weathermatch.dao.CurrentBatchRepository;
 import com.weathermatch.dtos.OpenWeatherMapDto;
 import com.weathermatch.models.City;
 import com.weathermatch.dao.CityRepository;
+import com.weathermatch.models.CurrentBatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
@@ -25,22 +28,32 @@ public class WeatherServiceImpl implements WeatherService {
     @Autowired
     CityRepository cityRepository;
 
+    @Autowired
+    CurrentBatchRepository currentBatchRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(WeatherServiceImpl.class);
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private Integer currentBatch = 0;
-
     @Scheduled(cron = "0 * * * * ?")
     public void fetchNextWeatherBatch() {
-        logger.info("fetchNextWeatherBatch() - started");
+        // API limit is 60 (enforced on a 'key' basis)
+        int batchSize = 60;
+        List<City> updateCityList = new ArrayList<>();
+        CurrentBatch currentBatch = currentBatchRepository.findById(1);
+        int currentBatchStartIndex = currentBatch.getResumeIndex();
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 
-        // API limit is 60 (enforced on a 'key' basis), so 50 just to be safe
-        Integer batchSize = 50;
-        for(int i = currentBatch; i<Math.min(idList.size(), currentBatch + batchSize); i++) {
+        logger.info(String.format("fetchNextWeatherBatch() - started with currentBatch %d", currentBatchStartIndex));
+        for (int idIndex = currentBatchStartIndex; idIndex < Math.min(idList.size(), currentBatchStartIndex + batchSize); idIndex++) {
             // TODO: make sure any http response other than 200 is dealt with
             // recommendation is to make calls to api.openweathermap.org no more than one time every 10 minutes for one location
-            String resourceUrl = "http://api.openweathermap.org/data/2.5/weather?id=" + idList.get(i) + "&APPID=" + owmApiKey;
-            OpenWeatherMapDto openWeatherMapDto = restTemplate.getForObject(resourceUrl, OpenWeatherMapDto.class);
+            String resourceUrl = "http://api.openweathermap.org/data/2.5/weather?id=" + idList.get(idIndex) + "&APPID=" + owmApiKey;
+            OpenWeatherMapDto openWeatherMapDto = null;
+            try {
+                openWeatherMapDto = restTemplate.getForObject(resourceUrl, OpenWeatherMapDto.class);
+            } catch (RestClientException e) {
+                logger.error(e.getMessage());
+            }
 
             // populate the models
             assert openWeatherMapDto != null;
@@ -54,28 +67,31 @@ public class WeatherServiceImpl implements WeatherService {
                     Math.round(openWeatherMapDto.getMain().getTemp()),
                     openWeatherMapDto.getMain().getHumidity(),
                     openWeatherMapDto.getWind().getSpeed(),
-                    new Timestamp(System.currentTimeMillis())
+                    new Timestamp(System.currentTimeMillis()),
+                    openWeatherMapDto.getWeather().getIcon().contains("d")
             );
 
             // update the data
-            cityRepository.save(cityModel);
+            updateCityList.add(cityModel);
         }
+        cityRepository.saveAll(updateCityList);
 
-        currentBatch += batchSize;
+        currentBatchStartIndex += batchSize;
 
-        if(currentBatch >= idList.size())
-        {
-            currentBatch = 0;
+        if (currentBatchStartIndex >= idList.size()) {
+            currentBatchStartIndex = 0;
             logger.info("fetchNextWeatherBatch() - end of list reached, currentBatch reset");
         }
 
-        logger.info("fetchNextWeatherBatch() - finished, currentBatch is now {}", currentBatch);
+        currentBatch.setResumeIndex(currentBatchStartIndex);
+        currentBatchRepository.save(currentBatch);
+        logger.info("fetchNextWeatherBatch() - finished, currentBatch is now {}", currentBatchStartIndex);
     }
 
     // we need a list of ids in advance for fetchNextWeatherBatch()
     private List<Long> idList;
+
     @PostConstruct
-    @DependsOn("H2DatabaseManagerImpl") // TODO: remove this line after database implemented
     public void buildIdList() {
         idList = new ArrayList<>();
         cityRepository.findAll().forEach(city -> idList.add(city.getId()));

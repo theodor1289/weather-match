@@ -47,7 +47,9 @@ class App extends Component {
       totalPages: 0,
       pageSize: 14,
       sortCategory: "name",
-      sortType: "desc"
+      selectedSortCategoryIndex: 0,
+      sortType: "asc",
+      selectedSortTypeIndex: 0
     };
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.searchCities = this.searchCities.bind(this);
@@ -67,6 +69,8 @@ class App extends Component {
 
     // App "waits" for 550 ms between calls of the below functions. This provides smoothness.
     const debounce_time = 550;
+    this.handleSortTypeClick = debounce(debounce_time, this.handleSortTypeClick);
+    this.handleSortCategoryClick = debounce(debounce_time, this.handleSortCategoryClick);
     this.searchCities = debounce(debounce_time, this.searchCities);
     this.changeTempFilter = debounce(debounce_time, this.changeTempFilter);
     this.changeHumidityFilter = debounce(debounce_time, this.changeHumidityFilter);
@@ -102,6 +106,54 @@ class App extends Component {
       this.loadItems();
     });
   }
+
+  handleSortCategoryClick = (_event, index) => {
+    switch (index) {
+      case 0:
+        this.setState({
+          sortCategory: "name",
+          selectedSortCategoryIndex: 0
+        }, function () {
+          this.loadItems();
+        });
+        break;
+      case 1:
+        this.setState({
+          sortCategory: "temperature",
+          selectedSortCategoryIndex: 1
+        }, function () {
+          this.loadItems();
+        });
+        break;
+      case 2:
+        this.setState({
+          sortCategory: "humidity",
+          selectedSortCategoryIndex: 2
+        }, function () {
+          this.loadItems();
+        });
+        break;
+      case 3:
+        this.setState({
+          sortCategory: "windspeed",
+          selectedSortCategoryIndex: 3
+        }, function () {
+          this.loadItems();
+        });
+        break;
+      default:
+        console.log(`Unkown sort category index ${index}`);
+    }
+  };
+
+  handleSortTypeClick = (_event, index) => {
+    this.setState({
+      sortType: this.state.sortType === "desc" ? "asc" : "desc",
+      selectedSortTypeIndex: index
+    }, function () {
+      this.loadItems();
+    });
+  };
 
   changeWeatherFilter = (newValue) => {
     const toggleOn = this.state.weatherFilter.indexOf(newValue) === -1;
@@ -191,7 +243,7 @@ class App extends Component {
         }
 
         const listOfCities = response.data.content.map((item) => {
-          item.image = getCorrectWeatherImage(item.main);
+          item.image = getCorrectWeatherImage(item.main, item.daytime);
           return item;
         });
 
@@ -237,6 +289,10 @@ class App extends Component {
           searchCities={this.searchCities}
           changeTheme={this.changeTheme}
           theme={this.state.appTheme}
+          selectedSortCategoryIndex={this.state.selectedSortCategoryIndex}
+          selectedSortTypeIndex={this.state.selectedSortTypeIndex}
+          handleSortTypeClick={this.handleSortTypeClick}
+          handleSortCategoryClick={this.handleSortCategoryClick}
         />
         <LeftDrawer
           drawerIsOpen={this.state.drawerIsOpen}

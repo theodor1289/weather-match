@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { styled, useTheme } from '@material-ui/core/styles';
+import { debounce } from "throttle-debounce";
 import CustomSnackbar from './CustomSnackbar';
 import RoomIcon from '@material-ui/icons/Room';
 import axios from 'axios';
@@ -10,6 +11,7 @@ var cancelClosestCityCall;
 
 export default function Geolocation(props) {
     const theme = useTheme();
+    const debounceHandleClick = React.useCallback(debounce(650, handleClick), []);
 
     const StyledGeoButton = styled(Button)({
         background: `linear-gradient(45deg, ${theme.palette.primary.dark} 30%, ${theme.palette.primary.main} 90%)`,
@@ -46,9 +48,9 @@ export default function Geolocation(props) {
                 else {
                     setSnackbarType('success');
                     setSnackbarMessage(`Successfully retrieved local weather conditions for ${response.data.name}, ${response.data.country}!`);
-                    props.changeTemp(null, [response.data.temperature - 2, response.data.temperature + 2]);
-                    props.changeHumidity(null, [response.data.humidity - 2, response.data.humidity + 2]);
-                    props.changeWind(null, [response.data.windspeed - 2, response.data.windspeed + 2]);
+                    props.changeTemp(null, [response.data.temperature, response.data.temperature]);
+                    props.changeHumidity(null, [response.data.humidity - 1, response.data.humidity + 1]);
+                    props.changeWind(null, [response.data.windspeed - 1, response.data.windspeed + 1]);
                     if (['Clear', 'Clouds', 'Rain', 'Drizzle', 'Snow', 'Thunderstorm'].indexOf(response.data.main) > -1)
                         props.changeWeatherFilterToExclusively(response.data.main);
                     else
@@ -93,7 +95,7 @@ export default function Geolocation(props) {
                 startIcon={<RoomIcon />}
                 variant="contained"
                 color="primary"
-                onClick={handleClick}
+                onClick={debounceHandleClick}
             >
                 Match my location
             </StyledGeoButton >

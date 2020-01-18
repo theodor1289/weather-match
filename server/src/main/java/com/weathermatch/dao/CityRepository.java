@@ -9,13 +9,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.List;
 
 @Repository
 public interface CityRepository extends PagingAndSortingRepository<City, String> {
     City findById(Long id);
 
-    @Query(value ="SELECT TOP 1 * FROM (SELECT * FROM CITY WHERE TIMESTAMP IS NOT NULL ORDER BY SQRT(POWER(ABS(LATITUDE - :inputLatitude), 2) + Power(ABS(LONGITUDE - :inputLongitude), 2)))", nativeQuery = true)
+    @Query(value ="SELECT * FROM " +
+            "(SELECT * FROM city WHERE timestamp IS NOT NULL ORDER BY SQRT(POWER(ABS(latitude - :inputLatitude), 2) + Power(ABS(longitude - :inputLongitude), 2))) AS closest_cities " +
+            "FETCH FIRST 1 ROW ONLY", nativeQuery = true)
     City findClosestCity(
             @Param("inputLatitude") Double latitude,
             @Param("inputLongitude") Double longitude);

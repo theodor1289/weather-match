@@ -18,7 +18,7 @@
     "throttle-debounce": "^2.1.0"
   },
   "scripts": {
-    "start": "BROWSER=firefox react-scripts start",
+    "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

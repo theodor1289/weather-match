@@ -148,6 +148,10 @@ export default function Bar(props) {
                     id={id}
                     open={open}
                     anchorEl={anchorEl}
+                    selectedSortCategoryIndex={props.selectedSortCategoryIndex}
+                    selectedSortTypeIndex={props.selectedSortTypeIndex}
+                    handleSortTypeClick={props.handleSortTypeClick}
+                    handleSortCategoryClick={props.handleSortCategoryClick}
                 />
             </Toolbar>
         </AppBar>

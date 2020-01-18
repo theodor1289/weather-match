@@ -11,15 +11,6 @@ import Waves from '@material-ui/icons/Waves';
 import Popover from '@material-ui/core/Popover';
 
 export default function BarPopover(props) {
-    const [selectedSortCategoryIndex, setSelectedSortCategoryIndex] = React.useState(0);
-    const handleSortCategoryClick = (_event, index) => {
-        setSelectedSortCategoryIndex(index);
-    };
-    const [selectedSortTypeIndex, setSelectedSortTypeIndex] = React.useState(0);
-    const handleSortTypeClick = (_event, index) => {
-        setSelectedSortTypeIndex(index);
-    };
-
     const handleClose = () => {
         props.setAnchorEl(null);
     };
@@ -42,8 +33,8 @@ export default function BarPopover(props) {
             <List component="nav" aria-label="category sort area">
                 <ListItem
                     button
-                    selected={selectedSortCategoryIndex === 0}
-                    onClick={event => handleSortCategoryClick(event, 0)}
+                    selected={props.selectedSortCategoryIndex === 0}
+                    onClick={event => props.handleSortCategoryClick(event, 0)}
                 >
                     <ListItemIcon>
                         <SortByAlpha />
@@ -52,8 +43,8 @@ export default function BarPopover(props) {
                 </ListItem>
                 <ListItem
                     button
-                    selected={selectedSortCategoryIndex === 1}
-                    onClick={event => handleSortCategoryClick(event, 1)}
+                    selected={props.selectedSortCategoryIndex === 1}
+                    onClick={event => props.handleSortCategoryClick(event, 1)}
                 >
                     <ListItemIcon>
                         <BeachAccess />
@@ -62,8 +53,8 @@ export default function BarPopover(props) {
                 </ListItem>
                 <ListItem
                     button
-                    selected={selectedSortCategoryIndex === 2}
-                    onClick={event => handleSortCategoryClick(event, 2)}
+                    selected={props.selectedSortCategoryIndex === 2}
+                    onClick={event => props.handleSortCategoryClick(event, 2)}
                 >
                     <ListItemIcon>
                         <Grain />
@@ -72,8 +63,8 @@ export default function BarPopover(props) {
                 </ListItem>
                 <ListItem
                     button
-                    selected={selectedSortCategoryIndex === 3}
-                    onClick={event => handleSortCategoryClick(event, 3)}
+                    selected={props.selectedSortCategoryIndex === 3}
+                    onClick={event => props.handleSortCategoryClick(event, 3)}
                 >
                     <ListItemIcon>
                         <Waves />
@@ -85,15 +76,15 @@ export default function BarPopover(props) {
             <List component="nav" aria-label="type sort area">
                 <ListItem
                     button
-                    selected={selectedSortTypeIndex === 0}
-                    onClick={event => handleSortTypeClick(event, 0)}
+                    selected={props.selectedSortTypeIndex === 0}
+                    onClick={event => props.handleSortTypeClick(event, 0)}
                 >
                     <ListItemText primary="Ascending" />
                 </ListItem>
                 <ListItem
                     button
-                    selected={selectedSortTypeIndex === 1}
-                    onClick={event => handleSortTypeClick(event, 1)}
+                    selected={props.selectedSortTypeIndex === 1}
+                    onClick={event => props.handleSortTypeClick(event, 1)}
                 >
                     <ListItemText primary="Descending" />
                 </ListItem>
