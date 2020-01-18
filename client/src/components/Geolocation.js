@@ -7,7 +7,7 @@ import RoomIcon from '@material-ui/icons/Room';
 import axios from 'axios';
 
 const CancelToken = axios.CancelToken;
-var cancelClosestCityCall;
+let cancelClosestCityCall;
 
 export default function Geolocation(props) {
     const theme = useTheme();
@@ -17,7 +17,7 @@ export default function Geolocation(props) {
         background: `linear-gradient(45deg, ${theme.palette.primary.dark} 30%, ${theme.palette.primary.main} 90%)`,
     });
 
-    var options = {
+    const options = {
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0
@@ -26,7 +26,7 @@ export default function Geolocation(props) {
     function success(pos) {
         cancelClosestCityCall && cancelClosestCityCall();
 
-        var crd = pos.coords;
+        const crd = pos.coords;
 
         axios.get('http://localhost:8080/api/v1/closestcity', {
             params: {
@@ -75,9 +75,9 @@ export default function Geolocation(props) {
     }
 
     function error(err) {
-        console.log(`ERROR(${err.code}): ${err.message}`)
+        console.log(`ERROR(${err.code}): ${err.message}`);
         setSnackbarType('error');
-        setSnackbarMessage('An error occured while retrieving GPS coordinates.')
+        setSnackbarMessage('An error occured while retrieving GPS coordinates.');
         setShowSnackbar(true);
     }
 

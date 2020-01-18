@@ -205,7 +205,7 @@ class App extends Component {
   loadItems(pageQuery) {
     cancelLoadItemsCall && cancelLoadItemsCall();
 
-    var url = api.baseUrl + '/api/v1/cities';
+    const url = api.baseUrl + '/api/v1/cities';
 
     this.setState({
       showLoader: true

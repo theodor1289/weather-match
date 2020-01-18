@@ -53,7 +53,7 @@ export default function Content(props) {
         return <Grid item>
             <Card retry={props.retry} status="no_results" />
                </Grid>;
-    };
+    }
 
     return (
         <main // clsx is a tiny (223B) utility for constructing className strings conditionally

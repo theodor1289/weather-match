@@ -17,7 +17,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
