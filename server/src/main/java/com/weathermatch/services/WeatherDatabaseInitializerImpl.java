@@ -87,11 +87,11 @@ public class WeatherDatabaseInitializerImpl {
             currentBatchRepository.save(new CurrentBatch(0));
             cityRepository.saveAll(initialCityList);
         } catch (ParseException err){
-            logger.error("Parse exception encountered for file: " + jsonCitiesPath);
+            logger.error(String.format("Parse exception encountered for file: %s", jsonCitiesPath));
         } catch (FileNotFoundException err){
-            logger.error("File could not be found: " + jsonCitiesPath);
+            logger.error(String.format("File could not be found: ", jsonCitiesPath));
         } catch (IOException err){
-            logger.error("I/O exception for file: " + jsonCitiesPath);
+            logger.error(String.format("I/O exception for file: ", jsonCitiesPath));
         }
         logger.info("Initialize() - finished");
     }

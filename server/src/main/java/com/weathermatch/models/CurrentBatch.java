@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class CurrentBatch {
     @Id
     @Column(name = "id", nullable = false, updatable = false)
-    private final Integer id = 1;
+    private Integer id = 1;
 
     @Column(name = "resume_index")
     private Integer resumeIndex;
