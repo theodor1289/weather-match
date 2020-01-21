@@ -35,9 +35,9 @@
 data-canonical-src="https://camo.githubusercontent.com/33d3e494efd825b30be8a82ec48164c88ca6ebbf/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f76696f6c6174696f6e732f636f6d2e776561746865726d617463683a776561746865722d6d617463683f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f" -->
 
 ## How to install:
-### 1. Start database (see details in the 'database instructions' folder)
+### 1. Start the database (see details in the 'database instructions' folder)
 
-### 2. Boot the webapp (server & client interface):
+### 2. Boot the webapp (SpringBoot server & React client interface)
 requirements: `Java 1.8` `Apache Maven`
 
 2a. First step in booting webapp:
@@ -86,7 +86,7 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 ```
 cd webapp
 mvn clean install
-./mvn spring-boot:run
+mvn spring-boot:run
 ```
 
 2c. For Swagger interface:
