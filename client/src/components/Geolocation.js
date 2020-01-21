@@ -59,11 +59,11 @@ export default function Geolocation(props) {
                 setShowSnackbar(true);
             })
             .catch((thrown) => {
-                if (axios.isCancel(thrown)) {
-                    console.log('Request canceled');
-                } else {
+                if (!axios.isCancel(thrown)) {
                     // handle error
-                    console.log('Error when loading items: ' + thrown.message);
+                    if(thrown.message !== "Network Error") {
+                        console.error('Error when loading items: ' + thrown.message);
+                    }
                     setSnackbarType('error');
                     setSnackbarMessage('A network connection to the weather database could not be established.');
                     setShowSnackbar(true);
@@ -75,7 +75,7 @@ export default function Geolocation(props) {
     }
 
     function error(err) {
-        console.log(`ERROR(${err.code}): ${err.message}`);
+        console.error(`ERROR(${err.code}): ${err.message}`);
         setSnackbarType('error');
         setSnackbarMessage('An error occured while retrieving GPS coordinates.');
         setShowSnackbar(true);

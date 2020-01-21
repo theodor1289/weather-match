@@ -107,7 +107,7 @@ export default function Bar(props) {
                     className={clsx(classes.menuButtonLeft, props.drawerIsOpen && classes.hide)}
                     onClick={props.toggleDrawer}
                     color="inherit"
-                    aria-label="open drawer"
+                    aria-label="open left drawer"
                     data-testid="toggleDrawerTestId"
                 >
                     <MenuIcon />
@@ -133,6 +133,7 @@ export default function Bar(props) {
                     className={clsx(classes.menuButtonRight)}
                     onClick={props.changeTheme}
                     color="inherit"
+                    aria-label="toggle dark mode"
                 >
                     {props.theme === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
                 </IconButton>
@@ -141,6 +142,7 @@ export default function Bar(props) {
                     onClick={handleClick}
                     color="inherit"
                     aria-describedby={id}
+                    aria-label="sort results"
                 >
                     <Sort />
                 </IconButton>

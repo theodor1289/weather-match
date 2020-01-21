@@ -35,6 +35,7 @@ export default function BarPopover(props) {
                     button
                     selected={props.selectedSortCategoryIndex === 0}
                     onClick={event => props.handleSortCategoryClick(event, 0)}
+                    aria-label="alphabetical sort"
                 >
                     <ListItemIcon>
                         <SortByAlpha />
@@ -45,6 +46,7 @@ export default function BarPopover(props) {
                     button
                     selected={props.selectedSortCategoryIndex === 1}
                     onClick={event => props.handleSortCategoryClick(event, 1)}
+                    aria-label="temperature sort"
                 >
                     <ListItemIcon>
                         <BeachAccess />
@@ -55,6 +57,7 @@ export default function BarPopover(props) {
                     button
                     selected={props.selectedSortCategoryIndex === 2}
                     onClick={event => props.handleSortCategoryClick(event, 2)}
+                    aria-label="humidity sort"
                 >
                     <ListItemIcon>
                         <Grain />
@@ -65,6 +68,7 @@ export default function BarPopover(props) {
                     button
                     selected={props.selectedSortCategoryIndex === 3}
                     onClick={event => props.handleSortCategoryClick(event, 3)}
+                    aria-label="wind sort"
                 >
                     <ListItemIcon>
                         <Waves />
@@ -78,6 +82,7 @@ export default function BarPopover(props) {
                     button
                     selected={props.selectedSortTypeIndex === 0}
                     onClick={event => props.handleSortTypeClick(event, 0)}
+                    aria-label="ascending sort"
                 >
                     <ListItemText primary="Ascending" />
                 </ListItem>
@@ -85,6 +90,7 @@ export default function BarPopover(props) {
                     button
                     selected={props.selectedSortTypeIndex === 1}
                     onClick={event => props.handleSortTypeClick(event, 1)}
+                    aria-label="descending sort"
                 >
                     <ListItemText primary="Descending" />
                 </ListItem>

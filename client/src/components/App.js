@@ -142,7 +142,7 @@ class App extends Component {
         });
         break;
       default:
-        console.log(`Unkown sort category index ${index}`);
+        console.error(`Unkown sort category index ${index}`);
     }
   };
 
@@ -238,7 +238,6 @@ class App extends Component {
             cities: [],
             networkProblems: false
           });
-          console.log("Made API call, no results found in the database.");
           return;
         }
 
@@ -256,17 +255,13 @@ class App extends Component {
         });
       })
       .catch((thrown) => {
-        if (axios.isCancel(thrown)) {
-          console.log('Request canceled.');
-        } else {
-          // handle error
-          console.log('Error when loading items: ' + thrown.message);
-
-          if (thrown.message === 'Network Error') {
-            this.setState({
-              networkProblems: true
-            });
+        if (!axios.isCancel(thrown)) {
+          if (thrown.message !== "Network Error") {
+            console.error('Error when loading items: ' + thrown.message);
           }
+          this.setState({
+            networkProblems: true
+          });
         }
       })
       .finally(() => {

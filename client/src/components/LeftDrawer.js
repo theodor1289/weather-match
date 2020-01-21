@@ -80,7 +80,9 @@ export default function LeftDrawer(props) {
                 <Typography className={classes.title} variant="h6" noWrap align="center">
                     Match Options
                 </Typography>
-                <IconButton onClick={props.toggleDrawer}>
+                <IconButton 
+                onClick={props.toggleDrawer}
+                aria-label="close drawer">
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
             </div>

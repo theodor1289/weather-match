@@ -83,16 +83,23 @@ export default function Content(props) {
                 </Grid>
                 {props.filteredCities.length > 0?
                     <Grid item>
-                    <IconButton color="primary" onClick={props.navigateBefore}>
+                    <IconButton 
+                    color="primary" 
+                    onClick={props.navigateBefore}
+                    aria-label="previous page">
                         <NavigateBefore />
                     </IconButton>
                     <Button
                         variant="text"
                         color="primary"
+                        aria-label="page city indices display"
                     >
                         {(props.currentPage*props.pageSize)+1}-{Math.min(props.totalCities, (props.currentPage+1)*props.pageSize)} of {props.totalCities}
                     </Button>
-                    <IconButton color="primary" onClick={props.navigateNext}>
+                    <IconButton 
+                    color="primary" 
+                    onClick={props.navigateNext}
+                    aria-label="next page">
                         <NavigateNext />
                     </IconButton>
                 </Grid> : null

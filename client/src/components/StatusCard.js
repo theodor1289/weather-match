@@ -38,7 +38,11 @@ export default function StatusCard({ status, retry }) {
         </CardContent>
       </CardActionArea>
       <CardActions style={{justifyContent: 'center'}}>
-        <Button size="large" color="primary" onClick={retry}>
+        <Button 
+        size="large" 
+        color="primary" 
+        onClick={retry}
+        aria-label="retry connection">
           Retry
         </Button>
       </CardActions>
