@@ -1,6 +1,9 @@
 # API Keys
 application.properties
 
+# Client build
+client/build/
+
 # Maven files
 log/
 target/

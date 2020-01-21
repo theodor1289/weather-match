@@ -41,7 +41,7 @@ data-canonical-src="https://camo.githubusercontent.com/33d3e494efd825b30be8a82ec
 requirements: `Java 1.8` `Apache Maven`
 
 2a. First step in booting webapp:
-Create a file `webapp/src/main/resources/application.properties` and populate it with the following:
+Create a file `server/src/main/resources/application.properties` and populate it with the following:
 ```
 # replace this mock key with your own OpenWeatherMap API key
 owm.api.key=REPLACE_WITH_YOUR_KEY
@@ -92,7 +92,7 @@ mvn clean install
 2c. For Swagger interface:
 ```http://localhost:8080/swagger-ui.html```
 
-### 3. Stop initialization mode for further server boots by going to './webapp/src/main/resources/application.properties' and setting initialize.database to 'false'
+### 3. Stop initialization mode for further server boots by going to './server/src/main/resources/application.properties' and setting initialize.database to 'false'
 
 
 ### Theodor Amariucai, 2020
