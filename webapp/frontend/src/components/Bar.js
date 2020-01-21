@@ -108,6 +108,7 @@ export default function Bar(props) {
                     onClick={props.toggleDrawer}
                     color="inherit"
                     aria-label="open drawer"
+                    data-testid="toggleDrawerTestId"
                 >
                     <MenuIcon />
                 </IconButton>
