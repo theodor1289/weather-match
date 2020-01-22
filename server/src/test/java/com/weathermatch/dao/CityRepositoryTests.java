@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,7 +16,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class CityRepositoryTests {
     @Autowired
     private CityRepository cityRepository;

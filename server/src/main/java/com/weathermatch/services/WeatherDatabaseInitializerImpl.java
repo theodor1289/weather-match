@@ -25,72 +25,65 @@ public class WeatherDatabaseInitializerImpl {
     // (NAME, COUNTRY) pair is not always unique in database, check Clark County in city-list.json
 
     private static final Logger logger = LoggerFactory.getLogger(WeatherDatabaseInitializerImpl.class);
-    @Value("${json.cities.path}")
-    private String jsonCitiesPath;
-    @Value("${initialize.database}")
-    private String initializeDatabase;
-
     @Autowired
     CityRepository cityRepository;
-
     @Autowired
     CurrentBatchRepository currentBatchRepository;
+    @Value("${json.cities.path}")
+    private String jsonCitiesPath;
+    @Value("${rows.hard.limit}")
+    private int rowsHardLimit;
 
-    // NOTE: This should only be used once, when initially populating the database.
     @PostConstruct
-    public void initialize(){
-        if(initializeDatabase.equals("false")) {
-            logger.info("Initialize() - skipping as indicated in application.properties");
+    public void initialize() {
+        // NOTE: This class should only be used once, when initially populating the database.
+        if (cityRepository.count() == rowsHardLimit) {
+            logger.info("Initialize() - skipping as database already initialized");
             return;
         }
 
         logger.info("Initialize() - started");
+        int rowsAdded = 0;
         JSONParser parser = new JSONParser();
-        try{
+        try {
             List<City> initialCityList = new ArrayList<>();
             JSONArray cityArray = (JSONArray) parser.parse(new FileReader(jsonCitiesPath));
-            for (Object currentCity : cityArray)
-            {
+            for (Object currentCity : cityArray) {
                 JSONObject city = (JSONObject) currentCity;
                 String country = (String) city.get("country");
+                String name = (String) city.get("name");
 
-                if(!country.equals("")) // filter records like Earth (id 6295630) from the JSON list
+                if (!country.isEmpty() && !name.isEmpty() && rowsAdded < rowsHardLimit) // filter records like Earth (id 6295630) from the JSON list
                 {
                     Long id = (Long) city.get("id");
-                    String name = (String) city.get("name");
                     JSONObject coord = (JSONObject) city.get("coord");
                     Double lon;
                     Double lat;
-                    if(coord.get("lon") instanceof Double)
-                    {
+                    if (coord.get("lon") instanceof Double) {
                         lon = (Double) coord.get("lon");
-                    }
-                    else
-                    {
+                    } else {
                         Long aux = (Long) coord.get("lon");
                         lon = Double.valueOf(aux);
                     }
 
-                    if(coord.get("lat") instanceof Double)
-                    {
+                    if (coord.get("lat") instanceof Double) {
                         lat = (Double) coord.get("lat");
-                    }
-                    else
-                    {
+                    } else {
                         Long aux = (Long) coord.get("lat");
                         lat = Double.valueOf(aux);
                     }
 
+                    rowsAdded++;
                     initialCityList.add(new City(id, name, country, lon, lat, null, null, null, null, null, true));
                 }
             }
             currentBatchRepository.save(new CurrentBatch(0));
             cityRepository.saveAll(initialCityList);
-        } catch (ParseException err){
+        } catch (ParseException err) {
             logger.error(String.format("Parse exception encountered for file: %s", jsonCitiesPath));
-        } catch (FileNotFoundException err){
+        } catch (FileNotFoundException err) {
             logger.error(String.format("File could not be found: ", jsonCitiesPath));
-        } catch (IOException err){
+        } catch (IOException err) {
             logger.error(String.format("I/O exception for file: ", jsonCitiesPath));
         }
         logger.info("Initialize() - finished");

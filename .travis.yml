@@ -11,4 +11,10 @@ addons:
 before_script: cd server
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - mvn clean install -B
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+
+deploy:
+  provider: heroku
+  api_key: $HEROKU_API_KEY
+  app: weather-match

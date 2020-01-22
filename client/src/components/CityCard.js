@@ -42,7 +42,7 @@ export default function CityCard({ city }) {
             Date: {city.timestamp.substring(0, 10)}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Time: {city.timestamp.substring(11, 16)}
+            Time: {city.timestamp.substring(11, 16)} UTC
           </Typography>
         </CardContent>
       </CardActionArea>

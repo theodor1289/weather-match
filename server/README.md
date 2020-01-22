@@ -8,8 +8,7 @@ owm.api.key=REPLACE_WITH_YOUR_KEY
 json.cities.path=src/main/resources/city-list.json
 
 # PostgreSQL
-# set this to 'true' only when initializing the database with empty cities:
-initialize.database=true
+rows.hard.limit=9950
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
 # this allows the schema file to create the repository, and not hibernate (which will overwrite the data that we're then going to inject from our data.sql file)
 spring.jpa.hibernate.ddl-auto=none
@@ -40,6 +39,7 @@ management.endpoint.health.roles=ADMIN
 
 # fix createClob() is not yet implemented, SQLFeatureNotSupportedException:
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+
 ```
 
 2. Start server:
@@ -51,8 +51,6 @@ mvn spring-boot:run
 
 To access the Swagger interface:
 ```http://localhost:8080/swagger-ui.html```
-
-3. Stop initialization mode for further server boots by going to './server/src/main/resources/application.properties' and setting initialize.database to 'false'
 
 
 ### Theodor Amariucai, 2020
