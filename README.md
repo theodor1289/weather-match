@@ -1,6 +1,5 @@
 ## Find the perfect weather match for your current city, search by custom parameters, and more!
 
-### Backend stats:
 <p align="center">
 <img alt="GitHub repo size" src="https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&url=https://img.shields.io/github/repo-size/theodor1289/weather-match">
 <img alt="Sonar Lines of Code" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=ncloc">
@@ -34,8 +33,6 @@
 
 <!-- This strategy might speed up badge load time:
 data-canonical-src="https://camo.githubusercontent.com/33d3e494efd825b30be8a82ec48164c88ca6ebbf/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f76696f6c6174696f6e732f636f6d2e776561746865726d617463683a776561746865722d6d617463683f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f" -->
-
-### Frontend stats:
 
 
 ### ©Theodor Amariucai, 2020

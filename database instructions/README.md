@@ -32,7 +32,7 @@ To drop a database (e.g. named 'postgres'):
 sudo -u postgres psql -c "DROP DATABASE IF EXISTS postgres;"
 ```
 
-###Start the server:
+### Start the database:
 ```
 sudo service postgresql start
 ```
@@ -68,6 +68,3 @@ FETCH FIRST 10 ROWS ONLY
 
 SELECT * FROM Current_Batch;
 ```
-
-## Important!
-In application.properties, set initialize.database=true when running the web app for the first time. This should populate the database with empty cities. Set this to 'false' immediately after stopping and keep it set to false unless you wish that updated cities be reset to NULL values of weather.

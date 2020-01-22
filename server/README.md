@@ -44,13 +44,10 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 
 2. Start server:
 ```
-cd webapp
+cd server
 mvn clean install
 mvn spring-boot:run
 ```
 
 To access the Swagger interface:
 ```http://localhost:8080/swagger-ui.html```
-
-
-### Theodor Amariucai, 2020

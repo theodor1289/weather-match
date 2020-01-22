@@ -1,6 +1,3 @@
-# API Keys
-application.properties
-
 # Client build
 client/build/
 
