@@ -1,20 +1,18 @@
 language: java
 jdk: openjdk8
-
 addons:
   sonarcloud:
-    organization: "theodor1289"
+    organization: theodor1289
     token:
-      secure: "VcdPCtf2cdaokZ82LOkilnxmooEOx3gu3s5I3um/Imz+EAl/IS2RzA4hRM8ZNsm/8iarrC9M2Ipw8l2T0NYpShpmfliXYjXaleY81Dq9RByvLO4PwzwbkxvVWSZPS8SpeQ0Yre/J8NOxh6HEo0k+EJH/Wje4Gn0eixco8lsZdecni6BNveFVVV2zD7F7kvVo7tYHvED8MlizxhxttJlXQfl8jvjw5YYlk9nLogp4uoPQquMn0xk7lWYCpZFY2slpQV4JD3He3bEPEZZSQQPggIj0V4nVhOPt1EoUmpB7is9SLjint8vVDK3y58TXBMGdk+hh+Qv2AY82UsuI/zezXGOB+fGNYqNvXPoopYNvEZ9ALWfMJcO2NtCjYLi59zqJObyIQnO6DqcKEPzpcUxfZNMEGzAcegFqpemIxy0AX3Oecpobyb/0TJocR5aSax980hKmbsgAgPaKV7SW1YdYBvxJb+4APRDStScz7CoqQpKrNeH9gRFfRAzGtfxzTLTJo2YSFCFo4LKr4aoJ+Cb1a1YdIRocUC2eIEI/YzI8Rmxl06scne+LYkACbJbRAJlDW4ta2DUFNRCyXvLRKjJsASrmIH5ZgDJULmVoofLvkLTOiIwuxAlFqmlpiZINeItdmkgEKv7mESzQFNE1HBAk112utR51NiNqq4inD+1+TDM="
- # encrypted value of your token
-
+      secure: VcdPCtf2cdaokZ82LOkilnxmooEOx3gu3s5I3um/Imz+EAl/IS2RzA4hRM8ZNsm/8iarrC9M2Ipw8l2T0NYpShpmfliXYjXaleY81Dq9RByvLO4PwzwbkxvVWSZPS8SpeQ0Yre/J8NOxh6HEo0k+EJH/Wje4Gn0eixco8lsZdecni6BNveFVVV2zD7F7kvVo7tYHvED8MlizxhxttJlXQfl8jvjw5YYlk9nLogp4uoPQquMn0xk7lWYCpZFY2slpQV4JD3He3bEPEZZSQQPggIj0V4nVhOPt1EoUmpB7is9SLjint8vVDK3y58TXBMGdk+hh+Qv2AY82UsuI/zezXGOB+fGNYqNvXPoopYNvEZ9ALWfMJcO2NtCjYLi59zqJObyIQnO6DqcKEPzpcUxfZNMEGzAcegFqpemIxy0AX3Oecpobyb/0TJocR5aSax980hKmbsgAgPaKV7SW1YdYBvxJb+4APRDStScz7CoqQpKrNeH9gRFfRAzGtfxzTLTJo2YSFCFo4LKr4aoJ+Cb1a1YdIRocUC2eIEI/YzI8Rmxl06scne+LYkACbJbRAJlDW4ta2DUFNRCyXvLRKjJsASrmIH5ZgDJULmVoofLvkLTOiIwuxAlFqmlpiZINeItdmkgEKv7mESzQFNE1HBAk112utR51NiNqq4inD+1+TDM=
 before_script: cd server
 script:
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - mvn clean install -B
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
-
+- mvn clean install -B
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 deploy:
   provider: heroku
-  api_key: $HEROKU_API_KEY
+  api_key: "$HEROKU_API_KEY"
   app: weather-match
+before_install:
+- openssl aes-256-cbc -K $encrypted_239dbd766207_key -iv $encrypted_239dbd766207_iv
+  -in application.properties.enc -out application.properties -d
