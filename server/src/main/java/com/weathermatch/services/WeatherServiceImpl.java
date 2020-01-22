@@ -89,11 +89,11 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     // we need a list of ids in advance for fetchNextWeatherBatch()
-    private List<Long> idList;
+    private List<Long> idList = new ArrayList<>();
 
     @PostConstruct
     public void buildIdList() {
-        idList = new ArrayList<>();
         cityRepository.findAll().forEach(city -> idList.add(city.getId()));
+        logger.info(String.format("Loaded %d ids in variable 'idList'", idList.size()));
     }
 }
