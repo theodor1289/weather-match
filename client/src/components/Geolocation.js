@@ -28,7 +28,7 @@ export default function Geolocation(props) {
 
         const crd = pos.coords;
 
-        axios.get('http://localhost:8080/api/v1/closestcity', {
+        axios.get('https://weather-match.herokuapp.com/api/v1/closestcity', {
             params: {
                 latitude: crd.latitude,
                 longitude: crd.longitude
