@@ -6,8 +6,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import NoNetwork from '../assets/no_network.jpg';
-import NoResults from '../assets/no_results.jpg';
+import NoNetwork from '../assets/no_network.webp';
+import NoResults from '../assets/no_results.webp';
 import { cardStyle } from '../utils/VisualConfiguration';
 
 export default function StatusCard({ status, retry }) {

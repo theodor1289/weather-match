@@ -3,14 +3,14 @@ function importAll(image) {
     return image.keys().map(image);
 }
 
-const atmosphere = importAll(require.context('../assets/Atmosphere/', false, /\.(png|jpe?g|svg)$/));
-const clear_day = importAll(require.context('../assets/Clear/Day/', false, /\.(png|jpe?g|svg)$/));
-const clouds_day = importAll(require.context('../assets/Clouds/Night/', false, /\.(png|jpe?g|svg)$/));
-const clear_night = importAll(require.context('../assets/Clear/Night/', false, /\.(png|jpe?g|svg)$/));
-const clouds_night = importAll(require.context('../assets/Clouds/Day/', false, /\.(png|jpe?g|svg)$/));
-const rain = importAll(require.context('../assets/Rain/', false, /\.(png|jpe?g|svg)$/));
-const snow = importAll(require.context('../assets/Snow/', false, /\.(png|jpe?g|svg)$/));
-const thunderstorm = importAll(require.context('../assets/Thunderstorm/', false, /\.(png|jpe?g|svg)$/));
+const atmosphere = importAll(require.context('../assets/Atmosphere/', false, /\.(png|jpe?g|svg|webp)$/));
+const clear_day = importAll(require.context('../assets/Clear/Day/', false, /\.(png|jpe?g|svg|webp)$/));
+const clouds_day = importAll(require.context('../assets/Clouds/Night/', false, /\.(png|jpe?g|svg|webp)$/));
+const clear_night = importAll(require.context('../assets/Clear/Night/', false, /\.(png|jpe?g|svg|webp)$/));
+const clouds_night = importAll(require.context('../assets/Clouds/Day/', false, /\.(png|jpe?g|svg|webp)$/));
+const rain = importAll(require.context('../assets/Rain/', false, /\.(png|jpe?g|svg|webp)$/));
+const snow = importAll(require.context('../assets/Snow/', false, /\.(png|jpe?g|svg|webp)$/));
+const thunderstorm = importAll(require.context('../assets/Thunderstorm/', false, /\.(png|jpe?g|svg|webp)$/));
 
 export default function getCorrectWeatherImage(weather, isDaytime) {
     function getRndInteger(min, max) {
