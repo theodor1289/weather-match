@@ -23,7 +23,7 @@ const WEATHER_STATES = [
   'Other'
 ];
 const api = {
-  baseUrl: 'http://localhost:8080'
+  baseUrl: 'https://weather-match.herokuapp.com'
 };
 const CancelToken = axios.CancelToken;
 var cancelLoadItemsCall;
