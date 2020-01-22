@@ -82,9 +82,9 @@ public class WeatherDatabaseInitializerImpl {
         } catch (ParseException err) {
             logger.error(String.format("Parse exception encountered for file: %s", jsonCitiesPath));
         } catch (FileNotFoundException err) {
-            logger.error(String.format("File could not be found: ", jsonCitiesPath));
+            logger.error(String.format("File could not be found: %s", jsonCitiesPath));
         } catch (IOException err) {
-            logger.error(String.format("I/O exception for file: ", jsonCitiesPath));
+            logger.error(String.format("I/O exception for file: %s", jsonCitiesPath));
         }
         logger.info("Initialize() - finished");
     }

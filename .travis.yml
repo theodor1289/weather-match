@@ -13,6 +13,7 @@ deploy:
   provider: heroku
   api_key: "$HEROKU_API_KEY"
   app: weather-match
+  skip_cleanup: true
 before_install:
 - openssl aes-256-cbc -K $encrypted_239dbd766207_key -iv $encrypted_239dbd766207_iv
   -in server/src/main/resources/application.properties.enc -out server/src/main/resources/application.properties -d
