@@ -32,7 +32,7 @@ public class CityController {
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')") // - use this to restrict some APIs to certain roles
 
-    @CrossOrigin(origins = "https://theodor1289.github.io")
+    @CrossOrigin(origins = "https://amariucaitheodor.github.io")
     @ApiOperation(value = "Get weather details for city with given id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "City weather is available", response = City.class),
@@ -74,7 +74,7 @@ public class CityController {
         }
     }
 
-    @CrossOrigin(origins = "https://theodor1289.github.io")
+    @CrossOrigin(origins = "https://amariucaitheodor.github.io")
     @ApiOperation(value = "Get weather details for all cities in the database")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "City weather is available", response = City.class),
@@ -143,7 +143,7 @@ public class CityController {
         }
     }
 
-    @CrossOrigin(origins = "https://theodor1289.github.io")
+    @CrossOrigin(origins = "https://amariucaitheodor.github.io")
     @ApiOperation(value = "Get weather details for city closest to given latitude and longitude")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Closest city has been retrieved", response = City.class),

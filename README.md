@@ -1,12 +1,7 @@
 ## Find the perfect weather match for your current city, search by custom parameters, and more!
 
 <p align="center">
-<img alt="GitHub repo size" src="https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&url=https://img.shields.io/github/repo-size/theodor1289/weather-match">
-<img alt="Sonar Lines of Code" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=ncloc">
-</p>
-
-<p align="center">
-<img alt="Travis (.org)" src="https://travis-ci.org/theodor1289/weather-match.svg?branch=master">
+<img alt="Travis (.org)" src="https://travis-ci.org/amariucaitheodor/weather-match.svg?branch=master">
 <img alt="Sonar Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=com.weathermatch%3Aweather-match&metric=alert_status">
 </p>
 
@@ -28,7 +23,7 @@
 </p>
 
 <p align="center">
-<img alt="Swagger Validator" src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/theodor1289/weather-match/master/server/api-docs.json">
+<img alt="Swagger Validator" src="http://online.swagger.io/validator?url=https://raw.githubusercontent.com/amariucaitheodor/weather-match/master/server/api-docs.json">
 </p>
 
 <!-- This strategy might speed up badge load time:
